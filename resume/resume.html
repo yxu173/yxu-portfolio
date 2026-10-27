@@ -1,0 +1,188 @@
+<!doctype html>
+<!--
+  Source for public/resume.pdf. Regenerate with:
+  chromium --headless --no-pdf-header-footer --print-to-pdf=public/resume.pdf resume/resume.html
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Mohamed Samir, Full-Stack Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..700&display=block" rel="stylesheet" />
+<style>
+  @page { size: A4; margin: 0; }
+  :root {
+    --ink: #0f1420;
+    --body: #2b3240;
+    --muted: #5d6576;
+    --rule: #dcd8cf;
+    --accent: #b86e12; /* Arcturus amber, darkened to pass contrast on white */
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #fff; }
+  body {
+    font-family: "Archivo", system-ui, sans-serif;
+    color: var(--body);
+    font-size: 9.2pt;
+    line-height: 1.37;
+    padding: 12mm 15mm 9mm;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  header { display: flex; justify-content: space-between; align-items: flex-end; gap: 8mm; }
+  h1 {
+    font-stretch: 125%;
+    font-weight: 650;
+    font-size: 25pt;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .role { margin-top: 2.2mm; font-size: 11.5pt; color: var(--ink); }
+  .contact { text-align: right; font-size: 9pt; line-height: 1.55; color: var(--muted); }
+  .contact a { color: var(--ink); }
+
+  .summary {
+    margin-top: 5mm;
+    padding-top: 4mm;
+    border-top: 1.5pt solid var(--accent);
+    font-size: 9.9pt;
+    line-height: 1.45;
+    color: var(--ink);
+  }
+
+  section { margin-top: 4.5mm; }
+  h2 {
+    font-stretch: 125%;
+    font-weight: 650;
+    font-size: 11pt;
+    color: var(--ink);
+    padding-bottom: 1.6mm;
+    border-bottom: 0.6pt solid var(--rule);
+    margin-bottom: 2.4mm;
+  }
+
+  .item + .item { margin-top: 3mm; }
+  .item-head { display: flex; justify-content: space-between; align-items: baseline; gap: 6mm; }
+  h3 { font-size: 10.3pt; font-weight: 650; color: var(--ink); }
+  h3 .org { font-weight: 400; color: var(--body); }
+  .when { font-size: 9pt; color: var(--muted); white-space: nowrap; }
+  .sub { margin-top: 0.6mm; font-size: 9pt; color: var(--muted); }
+  .sub a { color: var(--accent); }
+  .item p { margin-top: 1.2mm; }
+  ul { margin-top: 1.4mm; padding-left: 4mm; }
+  li { margin-top: 0.6mm; padding-left: 0.6mm; }
+  li::marker { color: var(--accent); }
+  strong { font-weight: 600; color: var(--ink); }
+
+  .skills { display: grid; grid-template-columns: 20mm 1fr; row-gap: 1mm; column-gap: 4mm; }
+  .skills dt { font-weight: 600; color: var(--ink); }
+
+</style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Mohamed Samir</h1>
+      <p class="role">Full-Stack Engineer, AI products</p>
+    </div>
+    <div class="contact">
+      Cairo, Egypt (UTC+2)<br />
+      <a href="mailto:mohamedsamir177@outlook.com">mohamedsamir177@outlook.com</a><br />
+      <a href="https://github.com/yxu173">github.com/yxu173</a> · <a href="https://linkedin.com/in/yxu">linkedin.com/in/yxu</a>
+    </div>
+  </header>
+
+  <p class="summary">
+    Full-stack engineer who builds AI products end to end: agents, RAG and workflows, the backend underneath them and
+    the interface on top. At Zynda AI I work across backend, frontend, AI and DevOps on Zynda, a multi-agent assistant
+    platform in production, and I ship open-source agent tools on the side.
+  </p>
+
+  <section>
+    <h2>Experience</h2>
+    <div class="item">
+      <div class="item-head">
+        <h3>Full-Stack Engineer<span class="org">, Zynda AI</span></h3>
+        <span class="when">Feb 2025 — Present</span>
+      </div>
+      <p class="sub">Zynda, live at <a href="https://zynda.ai">zynda.ai</a>: one chat box in front of 11 specialist agents</p>
+      <ul>
+        <li>Work across the whole platform: agents that research, write PDF/PPTX/XLSX/DOCX files, build and deploy apps, edit images and act in <strong>37 connected apps</strong>.</li>
+        <li><strong>Backend:</strong> tRPC APIs, Postgres with Drizzle and pgvector, long-running jobs on Trigger.dev streamed back through Redis, Daytona sandboxes.</li>
+        <li><strong>AI:</strong> agent router and specialist lanes on Mastra and the Vercel AI SDK, the Deep Research pipeline (plan, parallel gathering, cited report), five-layer memory.</li>
+        <li><strong>Frontend:</strong> Next.js 16 and React 19 chat, Studio node canvas for image and video, document viewers; WCAG 2.2 AA.</li>
+        <li><strong>DevOps:</strong> deployments, CI/CD and infrastructure upkeep.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Open-source projects</h2>
+    <div class="item">
+      <div class="item-head">
+        <h3>yxu-code<span class="org">, multi-agent orchestrator for the terminal</span></h3>
+        <span class="when">Oct 2026</span>
+      </div>
+      <p class="sub"><a href="https://github.com/yxu173/yxu-code">github.com/yxu173/yxu-code</a> · TypeScript, Bun, Claude Agent SDK · MIT</p>
+      <ul>
+        <li>Claude Code (Opus) plans and reviews while local coding agents (Claude, OpenCode, Command Code, any ACP agent) build in isolated git worktrees; nothing reaches the branch until the user applies it.</li>
+        <li>10 agent roles, feature/bugfix/review workflows, GitHub issue to pull request and CI fixes; custom terminal UI, 179 tests.</li>
+      </ul>
+    </div>
+    <div class="item">
+      <div class="item-head">
+        <h3>yxuOS<span class="org">, AI workspace for teams</span></h3>
+        <span class="when">May 2026</span>
+      </div>
+      <p class="sub"><a href="https://yxu-os.vercel.app">yxu-os.vercel.app</a> · <a href="https://github.com/yxu173/yxuOS">github.com/yxu173/yxuOS</a> · Next.js, Mastra, pgvector</p>
+      <ul>
+        <li>Whiteboards, a design canvas, research notes, plans and tasks in one workspace, with four Mastra agents (board, design, researcher, planner) and scorers that grade agent turns to catch prompt regressions.</li>
+        <li>A project brain: boards, designs, tasks, notes and imported GitHub code embedded in pgvector for search and agent context.</li>
+      </ul>
+    </div>
+    <div class="item">
+      <div class="item-head">
+        <h3>scy-ai<span class="org">, AI content curation</span></h3>
+        <span class="when">Jul 2026</span>
+      </div>
+      <p class="sub"><a href="https://scy-ai-mu.vercel.app">scy-ai-mu.vercel.app</a> · <a href="https://github.com/yxu173/scy-ai">github.com/yxu173/scy-ai</a> · Next.js, Mastra, Postgres</p>
+      <ul>
+        <li>An agent turns a topic into a tracker with real sources and keywords; Mastra workflows fetch up to 28 sources in parallel, de-duplicate, rank and summarize, and refresh every tracker daily.</li>
+      </ul>
+    </div>
+    <div class="item">
+      <div class="item-head">
+        <h3>Internship Connect Egypt<span class="org">, student and company matching</span></h3>
+        <span class="when">2023</span>
+      </div>
+      <p class="sub"><a href="https://github.com/yxu173/Internship-Platform">github.com/yxu173/Internship-Platform</a> · .NET, React, ML.NET, SQL Server</p>
+      <ul>
+        <li>Matching, AI resume builder and application tracking; pilot with 850+ students.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+      <h2>Skills</h2>
+      <dl class="skills">
+        <dt>AI</dt><dd>Mastra agents and workflows, Vercel AI SDK, RAG with pgvector, agent evals</dd>
+        <dt>Backend</dt><dd>TypeScript, Bun, Node, tRPC, PostgreSQL, Drizzle, Redis, .NET</dd>
+        <dt>Frontend</dt><dd>Next.js, React, Tailwind CSS, canvas and terminal UIs</dd>
+        <dt>Infra</dt><dd>Vercel, Neon, Trigger.dev, Daytona, GitHub Actions, Linux</dd>
+    </dl>
+  </section>
+  <section>
+      <h2>Education</h2>
+      <div class="item">
+        <div class="item-head">
+          <h3>Computer Science<span class="org">, Faculty of Science, Menofia University</span></h3>
+          <span class="when">2021 — 2025</span>
+        </div>
+      </div>
+  </section>
+</body>
+</html>

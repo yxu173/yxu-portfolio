@@ -3,21 +3,20 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer",
   {
     variants: {
       variant: {
-        default: "btn-cosmic text-white",
-        secondary:
-          "border border-white/20 bg-white/[0.04] text-foreground backdrop-blur hover:bg-white/[0.09] hover:border-indigo-400/50",
-        ghost: "hover:bg-white/10 hover:text-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+        default: "bg-arcturus text-primary-foreground hover:bg-[#f7b862]",
+        secondary: "border border-white/15 text-starlight hover:border-white/35 hover:bg-white/[0.04]",
+        ghost: "text-dust hover:text-starlight hover:bg-white/[0.05]",
+        link: "text-arcturus underline-offset-4 hover:underline",
       },
       size: {
-        default: "h-10 px-6 py-2",
+        default: "h-10 px-5",
         sm: "h-8 px-4 text-xs",
-        lg: "h-12 px-8 text-base",
-        icon: "h-9 w-9 rounded-full",
+        lg: "h-12 px-7 text-base",
+        icon: "h-9 w-9",
       },
     },
     defaultVariants: { variant: "default", size: "default" },

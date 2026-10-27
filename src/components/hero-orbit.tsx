@@ -13,34 +13,31 @@ type MoonSpec = {
   speed: number;
   phase: number;
   direction: 1 | -1;
-  from: string;
-  to: string;
+  color: string;
 };
 
 const MOONS: MoonSpec[] = [
   {
     title: "Backend",
-    line: ".NET + Node APIs · 99.95% uptime",
+    line: ".NET + Node APIs, 99.95% uptime",
     orbit: 0.7,
     flatten: 0.3,
     tilt: -0.2,
     speed: 0.19,
     phase: 0.5,
     direction: 1,
-    from: "#818cf8",
-    to: "#22d3ee",
+    color: "#9FB8FF",
   },
   {
     title: "AI & LLMs",
-    line: "RAG · multi-agent · evals",
+    line: "RAG, multi-agent, evals",
     orbit: 0.77,
     flatten: 0.36,
     tilt: 0.27,
     speed: 0.15,
     phase: 2.3,
     direction: -1,
-    from: "#e879f9",
-    to: "#818cf8",
+    color: "#F2A541",
   },
   {
     title: "Architecture",
@@ -51,20 +48,18 @@ const MOONS: MoonSpec[] = [
     speed: 0.12,
     phase: 4,
     direction: 1,
-    from: "#22d3ee",
-    to: "#a855f7",
+    color: "#ECE8DF",
   },
   {
     title: "Product",
-    line: "idea → shipped · 850+ users",
+    line: "Idea to shipped, 850+ users",
     orbit: 0.9,
     flatten: 0.48,
     tilt: 0.14,
     speed: 0.095,
     phase: 5.4,
     direction: -1,
-    from: "#a855f7",
-    to: "#f0abfc",
+    color: "rgb(242,190,120)",
   },
 ];
 
@@ -81,51 +76,32 @@ function initialMoonTransform(moon: MoonSpec): string {
 }
 
 const DISC_STYLE = {
-  background: [
-    "repeating-radial-gradient(circle at 50% 50%, rgba(255,255,255,0.055) 0 1px, transparent 1px 4px)",
-    "conic-gradient(from 0deg, rgba(99,102,241,0.3), rgba(217,70,239,0.16) 22%, rgba(11,1,26,0) 38%, rgba(34,211,238,0.2) 60%, rgba(168,85,247,0.16) 78%, rgba(99,102,241,0.3) 100%)",
-    "radial-gradient(circle at 34% 28%, #2a1e57 0%, #12082a 42%, #0b011a 68%, #04000a 100%)",
-  ].join(", "),
-  boxShadow:
-    "inset 0 0 40px rgba(0,0,0,0.85), inset 0 0 90px rgba(99,102,241,0.18), 0 0 60px rgba(99,102,241,0.35)",
+  background:
+    "repeating-radial-gradient(circle at 50% 50%, rgba(236,232,223,0.05) 0 1px, transparent 1px 4px), #0F1420",
+  boxShadow: "inset 0 0 0 1px rgba(236,232,223,0.12)",
 };
 
-function SaturnRings({ id, front = false }: { id: string; front?: boolean }) {
-  const gradientId = `${id}-gradient`;
-  const clipId = `${id}-clip`;
+function SaturnRings({ front = false }: { front?: boolean }) {
+  const clipId = front ? "hero-ring-front-clip" : "hero-ring-back-clip";
   return (
     <svg
       viewBox="0 0 200 200"
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 h-full w-full drop-shadow-[0_0_10px_rgba(129,140,248,0.35)]"
+      className="pointer-events-none absolute inset-0 h-full w-full"
     >
-      <defs>
-        <linearGradient
-          id={gradientId}
-          x1="18"
-          y1="40"
-          x2="184"
-          y2="164"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop offset="0%" stopColor="#67e8f9" stopOpacity="0.2" />
-          <stop offset="28%" stopColor="#818cf8" stopOpacity="0.9" />
-          <stop offset="55%" stopColor="#e879f9" stopOpacity="0.85" />
-          <stop offset="78%" stopColor="#818cf8" stopOpacity="0.7" />
-          <stop offset="100%" stopColor="#67e8f9" stopOpacity="0.2" />
-        </linearGradient>
-        {front ? (
+      {front ? (
+        <defs>
           <clipPath id={clipId}>
             <rect x="0" y="100" width="200" height="100" />
           </clipPath>
-        ) : null}
-      </defs>
+        </defs>
+      ) : null}
       <g clipPath={front ? `url(#${clipId})` : undefined}>
-        <g transform="rotate(-18 100 100)">
-          <ellipse cx="100" cy="100" rx="90" ry="26" fill="none" stroke={`url(#${gradientId})`} strokeWidth="0.9" opacity="0.45" />
-          <ellipse cx="100" cy="100" rx="83.5" ry="23.8" fill="none" stroke={`url(#${gradientId})`} strokeWidth="5" opacity="0.85" />
-          <ellipse cx="100" cy="100" rx="75" ry="21" fill="none" stroke={`url(#${gradientId})`} strokeWidth="1.4" opacity="0.6" />
-          <ellipse cx="100" cy="100" rx="67" ry="18.6" fill="none" stroke={`url(#${gradientId})`} strokeWidth="0.7" opacity="0.35" />
+        <g transform="rotate(-18 100 100)" fill="none">
+          <ellipse cx="100" cy="100" rx="90" ry="26" stroke="#ECE8DF" strokeWidth="0.9" opacity="0.25" />
+          <ellipse cx="100" cy="100" rx="83.5" ry="23.8" stroke="#F2A541" strokeWidth="4" opacity="0.8" />
+          <ellipse cx="100" cy="100" rx="75" ry="21" stroke="#ECE8DF" strokeWidth="1.2" opacity="0.4" />
+          <ellipse cx="100" cy="100" rx="67" ry="18.6" stroke="#ECE8DF" strokeWidth="0.7" opacity="0.2" />
         </g>
       </g>
     </svg>
@@ -233,11 +209,6 @@ export function OrbitalHero() {
       const level = getLevel();
       const live = playingRef.current && data !== null && level > 0.006;
 
-      const gradient = ctx.createLinearGradient(0, 0, size, size);
-      gradient.addColorStop(0, "#6366f1");
-      gradient.addColorStop(0.55, "#a855f7");
-      gradient.addColorStop(1, "#e879f9");
-
       if (live && data) {
         const bars = 120;
         const inner = size * 0.285;
@@ -251,7 +222,7 @@ export function OrbitalHero() {
           const angle = (i / bars) * Math.PI * 2 - Math.PI / 2 + t * 0.18;
           const length = Math.max(size * 0.006, amplitude * maxLen);
           const r1 = inner + length;
-          ctx.strokeStyle = gradient;
+          ctx.strokeStyle = "#F2A541";
           ctx.globalAlpha = 0.3 + amplitude * 0.7;
           ctx.beginPath();
           ctx.moveTo(center + Math.cos(angle) * inner, center + Math.sin(angle) * inner);
@@ -262,7 +233,7 @@ export function OrbitalHero() {
       } else {
         const breathe = reduced ? 0.5 : (Math.sin(t * 0.9) + 1) / 2;
         const radius = size * 0.285 + breathe * size * 0.006;
-        ctx.strokeStyle = gradient;
+        ctx.strokeStyle = "#F2A541";
         ctx.lineWidth = Math.max(1.2, size * 0.0035);
         ctx.globalAlpha = 0.45 + breathe * 0.25;
         ctx.beginPath();
@@ -345,9 +316,6 @@ export function OrbitalHero() {
         ref={sceneRef}
         className="relative aspect-square w-[min(520px,90vw)] select-none"
       >
-        <div className="pointer-events-none absolute left-1/2 top-1/2 h-[68%] w-[68%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-500/20 blur-[70px]" />
-        <div className="pointer-events-none absolute left-1/2 top-1/2 h-[38%] w-[38%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-fuchsia-500/20 blur-[50px]" />
-
         <svg
           viewBox="0 0 200 200"
           aria-hidden="true"
@@ -361,7 +329,7 @@ export function OrbitalHero() {
               rx={moon.orbit * 100}
               ry={moon.orbit * 100 * moon.flatten}
               fill="none"
-              stroke="rgba(165,180,252,0.14)"
+              stroke="rgba(236,232,223,0.14)"
               strokeWidth="0.4"
               strokeDasharray="1.5 3.5"
               transform={`rotate(${(moon.tilt * 180) / Math.PI} 100 100)`}
@@ -375,7 +343,7 @@ export function OrbitalHero() {
           className="pointer-events-none absolute inset-0 h-full w-full"
         />
 
-        <SaturnRings id="hero-ring-back" />
+        <SaturnRings />
 
         <div className="absolute left-1/2 top-1/2 aspect-square w-[52%] -translate-x-1/2 -translate-y-1/2">
           <div
@@ -383,34 +351,18 @@ export function OrbitalHero() {
             className="absolute inset-0 rounded-full will-change-transform"
             style={DISC_STYLE}
           />
-          <div
-            className="pointer-events-none absolute inset-0 rounded-full"
-            style={{
-              background:
-                "radial-gradient(circle at 32% 24%, rgba(199,210,254,0.22), transparent 44%)",
-            }}
-          />
           <button
             type="button"
             onClick={toggle}
             aria-pressed={playing}
             aria-label={playing ? "Pause the yxu.fm signal" : "Play the yxu.fm signal"}
-            className="absolute left-1/2 top-1/2 grid aspect-square w-[36%] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/20 transition-transform duration-300 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400/70 motion-safe:active:scale-95"
-            style={{
-              background:
-                "radial-gradient(circle at 35% 30%, rgba(129,140,248,0.55), #1b1240 55%, #0b011a 100%)",
-              boxShadow:
-                "0 0 30px rgba(168,85,247,0.45), inset 0 0 18px rgba(255,255,255,0.08)",
-            }}
+            className="absolute left-1/2 top-1/2 grid aspect-square w-[36%] -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/20 bg-space transition-colors duration-300 hover:border-arcturus/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arcturus/70"
           >
-            <LogoIcon
-              size={56}
-              className="h-[68%] w-[68%] drop-shadow-[0_0_10px_rgba(168,85,247,0.7)]"
-            />
+            <LogoIcon size={56} className="h-[68%] w-[68%]" />
           </button>
         </div>
 
-        <SaturnRings id="hero-ring-front" front />
+        <SaturnRings front />
 
         {MOONS.map((moon, i) => (
           <button
@@ -425,7 +377,7 @@ export function OrbitalHero() {
             onMouseLeave={() => handleLeave(i)}
             onFocus={() => handleEnter(i)}
             onBlur={() => handleLeave(i)}
-            className="group absolute left-1/2 top-1/2 z-20 grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-[#120a2c]/70 backdrop-blur-sm transition-colors duration-300 hover:border-white/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400/70"
+            className="group absolute left-1/2 top-1/2 z-20 grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-hull transition-colors duration-300 hover:border-white/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arcturus/70"
             style={{
               willChange: "transform",
               transform: initialMoonTransform(moon),
@@ -433,16 +385,8 @@ export function OrbitalHero() {
           >
             <span
               aria-hidden="true"
-              className="absolute inset-0 rounded-full opacity-0 blur-md transition-opacity duration-300 group-hover:opacity-70 group-focus-visible:opacity-70"
-              style={{ background: `radial-gradient(circle, ${moon.from}66, transparent 70%)` }}
-            />
-            <span
-              aria-hidden="true"
               className="h-3 w-3 rounded-full"
-              style={{
-                background: `linear-gradient(135deg, ${moon.from}, ${moon.to})`,
-                boxShadow: `0 0 12px ${moon.from}aa`,
-              }}
+              style={{ background: moon.color }}
             />
             <span
               aria-hidden="true"
@@ -454,7 +398,7 @@ export function OrbitalHero() {
         <div
           ref={tipRef}
           aria-hidden="true"
-          className={`pointer-events-none absolute left-1/2 top-1/2 z-30 w-max max-w-[184px] rounded-xl border border-white/15 bg-[#0B011A]/95 px-3 py-2 text-left shadow-[0_12px_40px_-10px_rgba(99,102,241,0.7)] backdrop-blur-md transition-opacity duration-150 ${
+          className={`pointer-events-none absolute left-1/2 top-1/2 z-30 w-max max-w-[184px] rounded-lg border border-white/15 bg-hull px-3 py-2 text-left transition-opacity duration-150 ${
             active === null ? "opacity-0" : "opacity-100"
           }`}
           style={{ transform: "translate(-50%, -100%)" }}
@@ -462,12 +406,12 @@ export function OrbitalHero() {
           {active !== null ? (
             <>
               <span
-                className="block font-mono text-[10px] uppercase tracking-[0.16em]"
-                style={{ color: MOONS[active].from }}
+                className="block text-[12px] font-medium"
+                style={{ color: MOONS[active].color }}
               >
                 {MOONS[active].title}
               </span>
-              <span className="mt-0.5 block text-[11px] leading-snug text-slate-300">
+              <span className="mt-0.5 block text-[11px] leading-snug text-dust">
                 {MOONS[active].line}
               </span>
             </>
@@ -475,12 +419,12 @@ export function OrbitalHero() {
         </div>
 
         {!playing ? (
-          <span className="pointer-events-none absolute bottom-[3%] left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/10 bg-[#0F112A]/80 px-3 py-1 font-mono text-[10px] tracking-[0.18em] text-indigo-200 backdrop-blur motion-safe:animate-pulse">
-            click the record ♪
+          <span className="pointer-events-none absolute bottom-[3%] left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/10 bg-hull px-3 py-1 text-[12px] text-starlight">
+            Click the record
           </span>
         ) : (
-          <span className="pointer-events-none absolute bottom-[3%] left-1/2 z-20 -translate-x-1/2 whitespace-nowrap font-mono text-[10px] tracking-[0.18em] text-fuchsia-200/80">
-            {frequency} · on air
+          <span className="pointer-events-none absolute bottom-[3%] left-1/2 z-20 -translate-x-1/2 whitespace-nowrap font-mono text-[11px] text-arcturus">
+            {frequency}, on air
           </span>
         )}
       </div>

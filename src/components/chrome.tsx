@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { Search, ArrowRight, FileText, Briefcase, User, Mail, Home } from "lucide-react";
+import { Search, FileText, Briefcase, User, Mail, Home } from "lucide-react";
 import { projects, posts } from "@/lib/data";
 
 const pages = [
@@ -55,46 +55,46 @@ export function CommandPalette() {
     <>
       <button
         onClick={openPalette}
-        className="hidden md:flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-[12px] text-slate-400 hover:text-white hover:border-indigo-400/40 transition"
+        className="hidden md:flex items-center gap-2 rounded-full border border-white/10 px-3.5 py-1.5 text-[12px] text-dust transition-colors hover:border-white/25 hover:text-starlight"
       >
-        <Search size={13} /> Search… <kbd className="rounded border border-white/15 bg-black/40 px-1.5 font-mono text-[10px]">⌘K</kbd>
+        <Search size={13} /> Search… <kbd className="rounded border border-white/15 px-1.5 text-[10px]">⌘K</kbd>
       </button>
       <AnimatePresence>
         {open && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[80] bg-black/70 backdrop-blur-sm p-4" onClick={() => setOpen(false)}>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[80] bg-space/80 p-4" onClick={() => setOpen(false)}>
             <motion.div
               initial={{ opacity: 0, y: -16, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -16, scale: 0.98 }}
               transition={{ duration: 0.2 }}
               onClick={(e) => e.stopPropagation()}
-              className="mx-auto mt-24 max-w-lg overflow-hidden rounded-2xl border border-white/15 bg-[#0F112A] shadow-2xl"
+              className="mx-auto mt-24 max-w-lg overflow-hidden rounded-lg border border-white/15 bg-hull"
             >
               <div className="flex items-center gap-2 border-b border-white/10 px-4 py-3">
-                <Search size={15} className="text-slate-500" />
-                <input autoFocus value={q} onChange={(e) => setQ(e.target.value)} placeholder="Go to page, project, article…" className="w-full bg-transparent text-[14px] text-white placeholder:text-slate-500 focus:outline-none" />
-                <kbd className="rounded border border-white/15 px-1.5 font-mono text-[10px] text-slate-500">ESC</kbd>
+                <Search size={15} className="text-dust" />
+                <input autoFocus value={q} onChange={(e) => setQ(e.target.value)} placeholder="Go to page, project, article…" className="w-full bg-transparent text-[14px] text-starlight placeholder:text-dust/70 focus:outline-none" />
+                <kbd className="rounded border border-white/15 px-1.5 text-[10px] text-dust">ESC</kbd>
               </div>
               <div className="max-h-80 overflow-y-auto p-2">
                 {matchedPages.map((p) => (
-                  <button key={p.href} onClick={() => go(p.href)} className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left text-[13px] text-slate-200 hover:bg-indigo-600/25">
-                    <p.icon size={14} className="text-indigo-300" /> {p.title} <ArrowRight size={12} className="ml-auto text-slate-500" />
+                  <button key={p.href} onClick={() => go(p.href)} className="flex w-full items-center gap-2.5 rounded-md px-3 py-2.5 text-left text-[13px] text-starlight hover:bg-white/[0.05]">
+                    <p.icon size={14} className="text-dust" /> {p.title}
                   </button>
                 ))}
-                {matchedProjects.length > 0 && <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-widest text-slate-500">Projects</p>}
+                {matchedProjects.length > 0 && <p className="px-3 pt-2 pb-1 text-[12px] text-dust">Projects</p>}
                 {matchedProjects.map((p) => (
-                  <button key={p.slug} onClick={() => go(`/projects/${p.slug}`)} className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left text-[13px] text-slate-200 hover:bg-indigo-600/25">
-                    <Briefcase size={14} className="text-fuchsia-300" /> {p.title} <span className="truncate text-[11px] text-slate-500">{p.tagline.slice(0, 40)}…</span>
+                  <button key={p.slug} onClick={() => go(`/projects/${p.slug}`)} className="flex w-full items-center gap-2.5 rounded-md px-3 py-2.5 text-left text-[13px] text-starlight hover:bg-white/[0.05]">
+                    <Briefcase size={14} className="text-arcturus" /> {p.title} <span className="truncate text-[11px] text-dust">{p.tagline.slice(0, 40)}…</span>
                   </button>
                 ))}
-                {matchedPosts.length > 0 && <p className="px-3 pt-2 pb-1 text-[10px] uppercase tracking-widest text-slate-500">Articles</p>}
+                {matchedPosts.length > 0 && <p className="px-3 pt-2 pb-1 text-[12px] text-dust">Articles</p>}
                 {matchedPosts.map((p) => (
-                  <button key={p.slug} onClick={() => go(`/blog/${p.slug}`)} className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left text-[13px] text-slate-200 hover:bg-indigo-600/25">
-                    <FileText size={14} className="text-cyan-300" /> {p.title}
+                  <button key={p.slug} onClick={() => go(`/blog/${p.slug}`)} className="flex w-full items-center gap-2.5 rounded-md px-3 py-2.5 text-left text-[13px] text-starlight hover:bg-white/[0.05]">
+                    <FileText size={14} className="text-rigel" /> {p.title}
                   </button>
                 ))}
                 {matchedPages.length === 0 && matchedProjects.length === 0 && matchedPosts.length === 0 && (
-                  <p className="px-3 py-6 text-center text-[13px] text-slate-500">No results for “{q}”.</p>
+                  <p className="px-3 py-6 text-center text-[13px] text-dust">No results for “{q}”.</p>
                 )}
               </div>
             </motion.div>
@@ -103,21 +103,6 @@ export function CommandPalette() {
       </AnimatePresence>
     </>
   );
-}
-
-export function ScrollProgress() {
-  const [p, setP] = useState(0);
-  useEffect(() => {
-    const onScroll = () => {
-      const h = document.documentElement;
-      const max = h.scrollHeight - h.clientHeight;
-      setP(max > 0 ? (h.scrollTop / max) * 100 : 0);
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-  return <div className="fixed inset-x-0 top-0 z-[60] h-[2px] bg-gradient-to-r from-indigo-500 via-fuchsia-500 to-cyan-400 transition-[width]" style={{ width: `${p}%` }} />;
 }
 
 export function BackToTop() {
@@ -135,7 +120,7 @@ export function BackToTop() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 12 }}
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="fixed bottom-20 right-4 z-[60] grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-[#0F112A]/90 text-white shadow-xl backdrop-blur hover:border-indigo-400/50 sm:bottom-6 sm:right-6"
+          className="fixed bottom-20 right-4 z-[60] grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-hull text-starlight hover:border-white/35 sm:bottom-6 sm:right-6"
           aria-label="Back to top"
         >
           ↑

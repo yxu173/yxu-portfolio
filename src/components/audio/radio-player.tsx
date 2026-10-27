@@ -77,10 +77,6 @@ export function RadioPlayer() {
       t += 0.03;
       ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
 
-      const gradient = ctx.createLinearGradient(0, CANVAS_H, CANVAS_W, 0);
-      gradient.addColorStop(0, "#6366f1");
-      gradient.addColorStop(1, "#a855f7");
-
       const data = getFrequencyData();
 
       if (playingRef.current && data) {
@@ -93,12 +89,12 @@ export function RadioPlayer() {
           const x = i * (barW + gap);
           const y = (CANVAS_H - barH) / 2;
           ctx.globalAlpha = 0.35 + v * 0.65;
-          ctx.fillStyle = gradient;
+          ctx.fillStyle = "#F2A541";
           ctx.fillRect(x, y, barW, barH);
         }
         ctx.globalAlpha = 1;
       } else {
-        ctx.strokeStyle = gradient;
+        ctx.strokeStyle = "#8C93A3";
         ctx.lineWidth = 1.5;
         ctx.globalAlpha = reducedMotion ? 0.45 : 0.6;
         ctx.beginPath();
@@ -171,16 +167,15 @@ export function RadioPlayer() {
       {!playing && (
         <span
           className={cn(
-            "pointer-events-none absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/10 bg-[#0F112A]/85 px-2.5 py-1 font-mono text-[10px] tracking-[0.14em] text-indigo-200 backdrop-blur",
-            !reducedMotion && "animate-pulse"
+            "pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-white/10 bg-hull px-2.5 py-1 text-[11px] text-starlight"
           )}
         >
           Tune in ♪
         </span>
       )}
 
-      <div className="flex items-center gap-2 rounded-full border border-white/10 bg-[#0F112A]/70 px-2.5 py-2 shadow-[0_10px_50px_-10px_rgba(99,102,241,0.7)] backdrop-blur-xl sm:gap-3 sm:px-4">
-        <span className="relative grid h-8 w-8 shrink-0 place-items-center rounded-full bg-black/40 ring-1 ring-white/10">
+      <div className="flex items-center gap-2 rounded-full border border-white/10 bg-hull px-2.5 py-2 sm:gap-3 sm:px-4">
+        <span className="relative grid h-8 w-8 shrink-0 place-items-center rounded-full bg-space ring-1 ring-white/10">
           <svg
             viewBox="0 0 24 24"
             className={cn(
@@ -193,8 +188,8 @@ export function RadioPlayer() {
               cx="12"
               cy="12"
               r="11"
-              fill="#08010f"
-              stroke="rgba(255,255,255,0.22)"
+              fill="#070A12"
+              stroke="rgba(236,232,223,0.22)"
               strokeWidth="1"
             />
             <circle
@@ -202,7 +197,7 @@ export function RadioPlayer() {
               cy="12"
               r="7.5"
               fill="none"
-              stroke="rgba(129,140,248,0.35)"
+              stroke="rgba(236,232,223,0.25)"
               strokeWidth="0.5"
             />
             <circle
@@ -210,7 +205,7 @@ export function RadioPlayer() {
               cy="12"
               r="5.5"
               fill="none"
-              stroke="rgba(232,121,249,0.4)"
+              stroke="rgba(236,232,223,0.25)"
               strokeWidth="0.5"
             />
             <circle
@@ -218,19 +213,19 @@ export function RadioPlayer() {
               cy="12"
               r="3.5"
               fill="none"
-              stroke="rgba(129,140,248,0.25)"
+              stroke="rgba(236,232,223,0.25)"
               strokeWidth="0.5"
             />
-            <circle cx="12" cy="12" r="1.7" fill="#a855f7" />
-            <circle cx="12" cy="12" r="0.55" fill="#0b011a" />
+            <circle cx="12" cy="12" r="1.7" fill="#F2A541" />
+            <circle cx="12" cy="12" r="0.55" fill="#070A12" />
           </svg>
         </span>
 
         <div className="hidden flex-col leading-tight sm:flex">
-          <span className="font-mono text-[11px] tracking-[0.12em] text-indigo-200">
+          <span className="font-mono text-[11px] text-starlight">
             yxu.fm · {frequency}
           </span>
-          <span className="font-mono text-[10px] text-slate-400">
+          <span className="font-mono text-[10px] text-dust">
             {trackName}
           </span>
         </div>
@@ -240,7 +235,7 @@ export function RadioPlayer() {
           onClick={toggle}
           title={playing ? "Pause (M)" : "Play (M)"}
           aria-label={playing ? "Pause music" : "Play music"}
-          className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-gradient-to-br from-indigo-500 to-fuchsia-500 text-white shadow-[0_0_20px_rgba(168,85,247,0.45)] transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400/70"
+          className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-arcturus text-space transition-colors hover:bg-arcturus/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-arcturus/70"
         >
           {playing ? (
             <Pause size={15} />
@@ -263,7 +258,7 @@ export function RadioPlayer() {
           value={volume}
           onChange={(event) => setVolume(Number(event.target.value))}
           aria-label="Volume"
-          className="hidden h-1.5 w-20 cursor-pointer appearance-none rounded-full bg-white/15 sm:block [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-fuchsia-400 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-fuchsia-400 [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(217,70,239,0.8)]"
+          className="hidden h-1.5 w-20 cursor-pointer appearance-none rounded-full bg-white/15 sm:block [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:bg-arcturus [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-arcturus"
         />
       </div>
     </div>

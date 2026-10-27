@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
-import { ArrowLeft, ArrowRight, Clock, Share2, BookOpen } from "lucide-react";
+import { ArrowLeft, Clock, Share2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Reveal } from "@/components/motion";
 import { LogoIcon } from "@/components/logo";
@@ -29,64 +29,61 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
 
   return (
     <div className="mx-auto max-w-3xl px-5 pb-20 pt-2">
-      <Link href="/blog" className="inline-flex items-center gap-1.5 text-[13px] text-slate-400 hover:text-white transition"><ArrowLeft size={14} /> All articles</Link>
+      <Link href="/blog" className="inline-flex items-center gap-1.5 text-[13px] text-dust hover:text-starlight transition-colors"><ArrowLeft size={14} /> All articles</Link>
       <Reveal>
-        <div className="mt-4 flex flex-wrap items-center gap-2 text-[12px] text-slate-500">
+        <div className="mt-4 flex flex-wrap items-center gap-2 text-[12px] text-dust">
           <Badge>{post.tag}</Badge>
-          <span>{post.date}</span>•<span className="flex items-center gap-1"><Clock size={12} /> {post.readingTime}</span>•<span>By Mohamed Samir</span>
+          <span>{post.date}</span><span className="flex items-center gap-1"><Clock size={12} /> {post.readingTime}</span><span>By Mohamed Samir</span>
         </div>
-        <h1 className="mt-3 text-3xl md:text-4xl font-semibold tracking-tight text-white">{post.title}</h1>
-        <p className="mt-3 text-[15px] leading-relaxed text-slate-400">{post.excerpt}</p>
-        <div className="relative mt-6 h-64 overflow-hidden rounded-3xl border border-white/10">
+        <h1 className="mt-3 font-wide text-3xl md:text-4xl font-semibold text-starlight">{post.title}</h1>
+        <p className="mt-3 text-[15px] leading-relaxed text-dust">{post.excerpt}</p>
+        <div className="relative mt-6 h-64 overflow-hidden rounded-lg border border-white/10">
           <Image src={post.image} alt={post.title} fill sizes="(max-width: 768px) 100vw, 768px" className="object-cover" priority />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0B011A]/70 to-transparent" />
         </div>
       </Reveal>
 
       <div className="mt-8 space-y-8">
         {post.content.map((sec, i) => (
           <Reveal key={i}>
-            <h2 className="flex items-center gap-2 text-lg font-semibold text-white"><BookOpen size={16} className="text-indigo-300" /> {sec.heading}</h2>
+            <h2 className="font-wide text-lg font-semibold text-starlight">{sec.heading}</h2>
             <div className="mt-2.5 space-y-3">
               {sec.body.map((para, j) => (
-                <p key={j} className="text-[14.5px] leading-relaxed text-slate-400">{para}</p>
+                <p key={j} className="text-[14.5px] leading-relaxed text-dust">{para}</p>
               ))}
             </div>
             {sec.code && (
-              <div className="mt-3 overflow-hidden rounded-2xl border border-white/10 bg-black/60">
+              <div className="mt-3 overflow-hidden rounded-lg border border-white/10 bg-hull">
                 <div className="flex items-center justify-between border-b border-white/10 px-4 py-2">
-                  <span className="font-mono text-[11px] text-slate-500">{sec.code.lang}</span>
-                  <span className="flex gap-1.5"><span className="h-2 w-2 rounded-full bg-red-400/70" /><span className="h-2 w-2 rounded-full bg-yellow-300/70" /><span className="h-2 w-2 rounded-full bg-green-400/70" /></span>
+                  <span className="font-mono text-[11px] text-dust">{sec.code.lang}</span>
                 </div>
-                <pre className="overflow-x-auto p-4 font-mono text-[12px] leading-relaxed text-slate-200"><code>{sec.code.code}</code></pre>
+                <pre className="overflow-x-auto p-4 font-mono text-[12px] leading-relaxed text-starlight/90"><code>{sec.code.code}</code></pre>
               </div>
             )}
           </Reveal>
         ))}
       </div>
 
-      <Reveal className="mt-10 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/[0.02] p-5">
+      <Reveal className="mt-10 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-white/10 bg-hull p-5">
         <div className="flex items-center gap-3">
           <LogoIcon size={44} className="rounded-full" />
-          <div><p className="text-[14px] font-medium text-white">Mohamed Samir</p><p className="text-[12px] text-slate-500">Backend + AI systems • Cairo</p></div>
+          <div><p className="text-[14px] font-medium text-starlight">Mohamed Samir</p><p className="text-[12px] text-dust">Backend and AI systems, Cairo</p></div>
         </div>
         <div className="flex gap-2">
-          <a href={`https://x.com/intent/tweet?text=${encodeURIComponent(post.title)}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-4 py-2 text-[12px] text-slate-300 hover:text-white hover:border-indigo-400/50 transition"><Share2 size={13} /> Share</a>
-          <Link href="/contact" className="rounded-full bg-gradient-to-r from-indigo-600 to-fuchsia-600 px-4 py-2 text-[12px] font-medium text-white">Discuss this →</Link>
+          <a href={`https://x.com/intent/tweet?text=${encodeURIComponent(post.title)}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-4 py-2 text-[12px] text-starlight/85 hover:border-white/35 transition-colors"><Share2 size={13} /> Share</a>
+          <Link href="/contact" className="rounded-full bg-arcturus px-4 py-2 text-[12px] font-medium text-primary-foreground hover:bg-[#f7b862] transition-colors">Discuss this</Link>
         </div>
       </Reveal>
 
       <div className="mt-8 grid sm:grid-cols-2 gap-4">
         {related.map((r) => (
-          <Link key={r.slug} href={`/blog/${r.slug}`} className="card-hover group overflow-hidden rounded-2xl border border-white/10 bg-[#0F112A]/80">
+          <Link key={r.slug} href={`/blog/${r.slug}`} className="group overflow-hidden rounded-lg border border-white/10 bg-hull transition-colors hover:border-white/25">
             <div className="relative h-28"><Image src={r.image} alt={r.title} fill sizes="360px" className="object-cover" loading="lazy" /></div>
-            <div className="p-4"><p className="text-[13.5px] font-medium text-white group-hover:text-indigo-200 line-clamp-2">{r.title}</p></div>
+            <div className="p-4"><p className="text-[13.5px] font-medium text-starlight line-clamp-2">{r.title}</p></div>
           </Link>
         ))}
       </div>
-      <Link href={`/blog/${next.slug}`} className="mt-4 flex items-center justify-between rounded-2xl border border-white/10 p-5 hover:border-indigo-400/40 transition group">
-        <span><span className="text-[11px] uppercase tracking-widest text-slate-500">Next article</span><span className="block font-medium text-white">{next.title}</span></span>
-        <ArrowRight size={18} className="text-slate-500 group-hover:text-white group-hover:translate-x-1 transition" />
+      <Link href={`/blog/${next.slug}`} className="group mt-4 flex items-center justify-between rounded-lg border border-white/10 p-5 transition-colors hover:border-arcturus/40">
+        <span><span className="text-[12px] text-dust">Next article</span><span className="block font-medium text-starlight group-hover:text-arcturus">{next.title}</span></span>
       </Link>
     </div>
   );

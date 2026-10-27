@@ -3,12 +3,15 @@
 import { useEffect, useRef } from "react";
 import { useCosmicAudio } from "@/components/audio/cosmic-audio";
 
-type Star = { x: number; y: number; r: number; speed: number; tw: number; phase: number; depth: number };
+type Star = { x: number; y: number; r: number; speed: number; tw: number; phase: number; depth: number; tint: string };
 type Shoot = { x: number; y: number; vx: number; vy: number; life: number; max: number };
 type Link = { a: number; b: number };
 
 const DEPTH_FACTOR = [1, 0.55, 0.28];
 const PARALLAX = 16;
+
+// Rough spectral-class mix: mostly white/G, some blue-white B, a few orange K giants.
+const TINTS = ["236,232,223", "236,232,223", "236,232,223", "200,214,255", "200,214,255", "242,190,120"];
 
 function buildLinks(stars: Star[], w: number, h: number): Link[] {
   const bright = stars
@@ -73,30 +76,31 @@ export function Starfield({ density = 1, className = "" }: { density?: number; c
       if (!sctx) return;
       const half = size / 2;
       const gradient = sctx.createRadialGradient(half, half, 0, half, half, half);
-      gradient.addColorStop(0, "rgba(129,140,248,1)");
-      gradient.addColorStop(1, "rgba(129,140,248,0)");
+      gradient.addColorStop(0, "rgba(236,232,223,1)");
+      gradient.addColorStop(1, "rgba(236,232,223,0)");
       sctx.fillStyle = gradient;
       sctx.fillRect(0, 0, size, size);
       glowSprite = sprite;
     };
 
     const buildStars = () => {
-      const count = Math.floor((w * h) / 5200 * density);
+      const count = Math.floor((w * h) / 6000 * density);
       stars = Array.from({ length: count }, () => ({
         x: Math.random() * w,
         y: Math.random() * h,
-        r: Math.random() * 1.4 + 0.3,
+        r: Math.random() * 1.3 + 0.5,
         speed: Math.random() * 0.12 + 0.02,
         tw: Math.random() * 2 + 1,
         phase: Math.random() * Math.PI * 2,
         depth: Math.floor(Math.random() * 3),
+        tint: TINTS[Math.floor(Math.random() * TINTS.length)],
       }));
       links = buildLinks(stars, w, h);
     };
 
     const drawLinks = (alpha: number) => {
       if (links.length === 0) return;
-      ctx.strokeStyle = `rgba(165,180,252,${alpha.toFixed(3)})`;
+      ctx.strokeStyle = `rgba(159,184,255,${alpha.toFixed(3)})`;
       ctx.lineWidth = 0.6;
       for (const link of links) {
         const a = stars[link.a];
@@ -119,11 +123,11 @@ export function Starfield({ density = 1, className = "" }: { density?: number; c
         const a = 0.35 + 0.65 * Math.abs(Math.sin(s.phase));
         ctx.beginPath();
         ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(226,232,240,${(a * 0.9).toFixed(3)})`;
+        ctx.fillStyle = `rgba(${s.tint},${(a * 0.9).toFixed(3)})`;
         ctx.fill();
         if (s.r > 1.1 && glowSprite) {
           const glowR = s.r * 3.2;
-          ctx.globalAlpha = a * 0.35;
+          ctx.globalAlpha = a * 0.2;
           ctx.drawImage(glowSprite, s.x - glowR, s.y - glowR, glowR * 2, glowR * 2);
           ctx.globalAlpha = 1;
         }
@@ -170,11 +174,11 @@ export function Starfield({ density = 1, className = "" }: { density?: number; c
         const r = s.r * (1 + level * 0.22);
         ctx.beginPath();
         ctx.arc(x, y, r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(226,232,240,${(a * 0.9).toFixed(3)})`;
+        ctx.fillStyle = `rgba(${s.tint},${(a * 0.9).toFixed(3)})`;
         ctx.fill();
         if (s.r > 1.1 && glowSprite) {
           const glowR = s.r * 3.2 * (1 + level * 0.9);
-          ctx.globalAlpha = a * (0.35 + level * 0.35);
+          ctx.globalAlpha = a * (0.2 + level * 0.35);
           ctx.drawImage(glowSprite, x - glowR, y - glowR, glowR * 2, glowR * 2);
           ctx.globalAlpha = 1;
         }
@@ -190,7 +194,7 @@ export function Starfield({ density = 1, className = "" }: { density?: number; c
         const fade = 1 - sh.life / sh.max;
         const grad = ctx.createLinearGradient(sh.x, sh.y, sh.x - sh.vx * 10, sh.y - sh.vy * 10);
         grad.addColorStop(0, `rgba(255,255,255,${(0.9 * fade).toFixed(3)})`);
-        grad.addColorStop(1, "rgba(99,102,241,0)");
+        grad.addColorStop(1, "rgba(242,165,65,0)");
         ctx.strokeStyle = grad;
         ctx.lineWidth = 1.6;
         ctx.beginPath();
@@ -230,16 +234,4 @@ export function Starfield({ density = 1, className = "" }: { density?: number; c
   }, [density]);
 
   return <canvas ref={ref} className={className} aria-hidden />;
-}
-
-export function Nebula({ className = "" }: { className?: string }) {
-  return (
-    <div className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`} aria-hidden>
-      <div className="absolute -top-40 left-1/2 h-[560px] w-[900px] -translate-x-1/2 rounded-full bg-indigo-600/25 blur-[130px] animate-pulse" />
-      <div className="absolute top-1/3 -left-40 h-[420px] w-[420px] rounded-full bg-fuchsia-600/15 blur-[120px]" />
-      <div className="absolute top-1/4 -right-40 h-[480px] w-[480px] rounded-full bg-cyan-500/10 blur-[120px]" />
-      <div className="absolute bottom-0 left-1/2 h-[220px] w-[1100px] -translate-x-1/2 rounded-[100%] bg-indigo-500/20 blur-[80px]" />
-      <div className="cosmic-grid absolute inset-0" />
-    </div>
-  );
 }

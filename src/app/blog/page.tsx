@@ -1,86 +1,79 @@
-"use client";
-
-import { useState } from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
-import { Search, ArrowRight, Clock } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Reveal, SectionHeading, Stagger, StaggerItem } from "@/components/motion";
+import { Newsletter } from "@/components/site-footer";
 import { posts } from "@/lib/data";
 
-export default function BlogPage() {
-  const [q, setQ] = useState("");
-  const [tag, setTag] = useState("All");
-  const tags = ["All", ...Array.from(new Set(posts.map((p) => p.tag)))];
-  const list = posts.filter((p) => {
-    const mq = !q || (p.title + p.tag + p.excerpt).toLowerCase().includes(q.toLowerCase());
-    const mt = tag === "All" || p.tag === tag;
-    return mq && mt;
-  });
-  const featured = posts[0];
+export const metadata: Metadata = {
+  title: "Blog",
+  description: "Notes from Mohamed Samir on building AI products, agents and developer tools.",
+};
 
+// A small, unlit constellation: the empty sky before the first post.
+const STARS = [
+  [24, 70], [70, 38], [118, 56], [160, 24], [204, 48], [250, 30], [292, 66],
+] as const;
+
+function EmptySky() {
   return (
-    <div className="mx-auto max-w-6xl px-5 pb-20 pt-2">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <SectionHeading eyebrow="Blog" title="Notes from shipping AI systems" desc="No fluff — what broke, what worked, exact configs. One practical post every few weeks." />
-        <Reveal delay={0.1} className="relative w-full md:w-64">
-          <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search articles..." className="h-10 w-full rounded-full border border-white/10 bg-white/[0.04] pl-9 pr-4 text-[13px] text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-400/60" />
-        </Reveal>
-      </div>
+    <svg viewBox="0 0 316 96" className="h-auto w-full max-w-sm" aria-hidden="true">
+      <polyline
+        points={STARS.map(([x, y]) => `${x},${y}`).join(" ")}
+        fill="none"
+        stroke="#ece8df"
+        strokeOpacity="0.14"
+        strokeDasharray="2 5"
+      />
+      {STARS.map(([x, y], i) => (
+        <circle key={i} cx={x} cy={y} r={i === 0 ? 3.5 : 2} fill={i === 0 ? "#f2a541" : "#8c93a3"} fillOpacity={i === 0 ? 1 : 0.5} />
+      ))}
+    </svg>
+  );
+}
 
-      {/* featured */}
-      {!q && tag === "All" && (
-        <Reveal className="mt-6">
-          <Link href={`/blog/${featured.slug}`} className="group grid overflow-hidden rounded-3xl border border-white/10 bg-[#0F112A]/80 md:grid-cols-2 hover:border-indigo-400/40 transition">
-            <div className="relative h-56 md:h-full min-h-56">
-              <Image src={featured.image} alt={featured.title} fill sizes="(max-width: 768px) 100vw, 560px" className="object-cover group-hover:scale-105 transition-transform duration-700" />
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#0F112A]/40" />
-              <span className="absolute left-4 top-4 rounded-full bg-black/60 px-2.5 py-1 text-[10px] text-white backdrop-blur">★ Featured</span>
-            </div>
-            <div className="p-6 md:p-8">
-              <div className="flex items-center gap-2 text-[11px] text-slate-500">
-                <Badge variant="secondary" className="text-[10px]">{featured.tag}</Badge>
-                <span>{featured.date}</span>•<span className="flex items-center gap-1"><Clock size={11} /> {featured.readingTime}</span>
-              </div>
-              <h2 className="mt-2 text-xl md:text-2xl font-semibold text-white group-hover:text-indigo-200 transition">{featured.title}</h2>
-              <p className="mt-2 text-[13.5px] leading-relaxed text-slate-400">{featured.excerpt}</p>
-              <span className="mt-4 inline-flex items-center gap-1 text-[13px] text-indigo-300 group-hover:text-white">Read article <ArrowRight size={14} /></span>
-            </div>
-          </Link>
-        </Reveal>
-      )}
+export default function BlogPage() {
+  return (
+    <div className="mx-auto max-w-3xl px-5 pb-24 pt-6">
+      <h1 className="font-wide text-4xl font-semibold text-starlight md:text-5xl">Blog</h1>
+      <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-dust">
+        Notes on building AI products, agents and the tools around them: what worked, what broke and why.
+      </p>
 
-      <Reveal delay={0.05} className="mt-5 flex flex-wrap gap-2">
-        {tags.map((t) => (
-          <button key={t} onClick={() => setTag(t)} className={`rounded-full px-3.5 py-1.5 text-[12px] border transition cursor-pointer ${tag === t ? "bg-white text-black border-white" : "border-white/15 text-slate-400 hover:text-white"}`}>
-            {t}
-          </button>
-        ))}
-      </Reveal>
-
-      <Stagger className="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {list.map((p) => (
-          <StaggerItem key={p.slug}>
-            <Link href={`/blog/${p.slug}`} className="card-hover group block overflow-hidden rounded-2xl border border-white/10 bg-[#0F112A]/80">
-              <div className="relative h-40">
-                <Image src={p.image} alt={p.title} fill sizes="(max-width: 768px) 100vw, 360px" className="object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0F112A] via-transparent to-transparent" />
-              </div>
-              <div className="p-5">
-                <div className="flex items-center gap-2 text-[11px] text-slate-500">
-                  <Badge variant="secondary" className="text-[10px]">{p.tag}</Badge>
-                  <span>{p.date}</span>•<span>{p.readingTime}</span>
+      {posts.length === 0 ? (
+        <section className="mt-14 rounded-lg border border-white/10 bg-hull px-6 py-12 sm:px-10">
+          <EmptySky />
+          <h2 className="font-wide mt-8 text-2xl font-semibold text-starlight">No posts yet</h2>
+          <p className="mt-3 max-w-md text-[15px] leading-relaxed text-dust">
+            The first star is lit. Subscribe and the first post will land in your inbox the day it&apos;s published.
+          </p>
+          <div className="mt-6">
+            <Newsletter />
+          </div>
+          <p className="mt-8 text-[14px] text-dust">
+            Until then, the{" "}
+            <Link href="/projects" className="text-starlight underline underline-offset-4 hover:text-arcturus">
+              projects
+            </Link>{" "}
+            tell the story of what I&apos;ve been building.
+          </p>
+        </section>
+      ) : (
+        <ol className="mt-14 divide-y divide-white/10 border-y border-white/10">
+          {posts.map((p) => (
+            <li key={p.slug}>
+              <Link href={`/blog/${p.slug}`} className="group grid gap-1 py-6 sm:grid-cols-[8rem_1fr] sm:gap-6">
+                <time className="text-[13px] text-dust">{p.date}</time>
+                <div>
+                  <h2 className="text-[18px] font-semibold text-starlight group-hover:text-arcturus">{p.title}</h2>
+                  <p className="mt-1.5 text-[15px] leading-relaxed text-dust">{p.excerpt}</p>
+                  <p className="mt-2 text-[13px] text-dust/80">
+                    {p.tag}, {p.readingTime}
+                  </p>
                 </div>
-                <h3 className="mt-2 text-[15px] font-semibold text-white group-hover:text-indigo-200 transition line-clamp-2">{p.title}</h3>
-                <p className="mt-1 text-[12.5px] text-slate-400 line-clamp-2">{p.excerpt}</p>
-                <span className="mt-3 inline-flex items-center gap-1 text-[12.5px] text-indigo-300 group-hover:text-white transition">Read <ArrowRight size={13} /></span>
-              </div>
-            </Link>
-          </StaggerItem>
-        ))}
-      </Stagger>
-      {list.length === 0 && <p className="mt-10 text-center text-sm text-slate-500">No articles for “{q}”.</p>}
+              </Link>
+            </li>
+          ))}
+        </ol>
+      )}
     </div>
   );
 }

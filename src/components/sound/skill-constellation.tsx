@@ -15,9 +15,9 @@ type ConstellationGroup = {
 
 const GROUPS: ConstellationGroup[] = [
   {
-    name: "THE BACKEND",
-    color: "#67e8f9",
-    soft: "rgba(103,232,249,0.5)",
+    name: "The backend",
+    color: "#9FB8FF",
+    soft: "rgba(159,184,255,0.5)",
     labelX: 165,
     path: "M70,118 L210,84 L262,172 L170,204 L92,262 L224,292",
     stars: [
@@ -30,9 +30,9 @@ const GROUPS: ConstellationGroup[] = [
     ],
   },
   {
-    name: "THE MIND",
-    color: "#f0abfc",
-    soft: "rgba(240,171,252,0.5)",
+    name: "The mind",
+    color: "#F2A541",
+    soft: "rgba(242,165,65,0.5)",
     labelX: 425,
     path: "M342,124 L472,88 L522,196 L402,226 L322,266 L484,300",
     stars: [
@@ -45,9 +45,9 @@ const GROUPS: ConstellationGroup[] = [
     ],
   },
   {
-    name: "THE SURFACE",
-    color: "#a5b4fc",
-    soft: "rgba(165,180,252,0.5)",
+    name: "The surface",
+    color: "#ECE8DF",
+    soft: "rgba(236,232,223,0.5)",
     labelX: 680,
     path: "M596,132 L726,96 L688,228 L596,132",
     stars: [
@@ -108,10 +108,8 @@ export function SkillConstellation() {
   const activeStar = active !== null ? ALL_STARS[active] : null;
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] backdrop-blur">
-      <div className="pointer-events-none absolute -left-20 top-0 h-56 w-56 rounded-full bg-cyan-500/10 blur-[80px]" />
-      <div className="pointer-events-none absolute right-0 top-10 h-64 w-64 rounded-full bg-fuchsia-600/10 blur-[90px]" />
-      <div className="relative overflow-x-auto p-3 sm:p-5">
+    <div className="overflow-hidden rounded-lg border border-white/10 bg-hull">
+      <div className="overflow-x-auto p-3 sm:p-5">
         <div className="min-w-[680px]">
           <svg
             viewBox="0 0 800 420"
@@ -119,37 +117,12 @@ export function SkillConstellation() {
             aria-label="Star map of Mohamed Samir's technical stack across backend, AI and frontend constellations"
             className="block h-auto w-full"
           >
-            <defs>
-              <radialGradient id="sky-glow" cx="50%" cy="46%" r="62%">
-                <stop offset="0%" stopColor="#1e1b4b" stopOpacity="0.75" />
-                <stop offset="55%" stopColor="#12042b" stopOpacity="0.35" />
-                <stop offset="100%" stopColor="#0b011a" stopOpacity="0" />
-              </radialGradient>
-              <radialGradient id="star-halo-cyan" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#67e8f9" stopOpacity="0.55" />
-                <stop offset="100%" stopColor="#67e8f9" stopOpacity="0" />
-              </radialGradient>
-              <radialGradient id="star-halo-fuchsia" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#f0abfc" stopOpacity="0.55" />
-                <stop offset="100%" stopColor="#f0abfc" stopOpacity="0" />
-              </radialGradient>
-              <radialGradient id="star-halo-indigo" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#a5b4fc" stopOpacity="0.55" />
-                <stop offset="100%" stopColor="#a5b4fc" stopOpacity="0" />
-              </radialGradient>
-              <linearGradient id="sky-line" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stopColor="#67e8f9" stopOpacity="0.45" />
-                <stop offset="50%" stopColor="#f0abfc" stopOpacity="0.45" />
-                <stop offset="100%" stopColor="#a5b4fc" stopOpacity="0.45" />
-              </linearGradient>
-            </defs>
 
-            <rect width="800" height="420" rx="18" fill="#080015" />
-            <rect width="800" height="420" rx="18" fill="url(#sky-glow)" />
+            <rect width="800" height="420" rx="8" fill="#070A12" />
 
             <g aria-hidden="true">
               {FIELD_STARS.map((star) => (
-                <circle key={star.id} cx={star.x} cy={star.y} r={star.r} fill="#e0e7ff" opacity={star.o} />
+                <circle key={star.id} cx={star.x} cy={star.y} r={star.r} fill="#ECE8DF" opacity={star.o} />
               ))}
             </g>
 
@@ -161,10 +134,8 @@ export function SkillConstellation() {
                   textAnchor="middle"
                   fontSize="15"
                   fontWeight="700"
-                  letterSpacing="3.5"
                   fill={group.color}
                   opacity="0.9"
-                  fontFamily="ui-monospace, monospace"
                 >
                   {group.name}
                 </text>
@@ -185,8 +156,6 @@ export function SkillConstellation() {
 
             {ALL_STARS.map((star, index) => {
               const isActive = active === index;
-              const halo =
-                star.groupIndex === 0 ? "url(#star-halo-cyan)" : star.groupIndex === 1 ? "url(#star-halo-fuchsia)" : "url(#star-halo-indigo)";
               return (
                 <g
                   key={star.name}
@@ -208,14 +177,12 @@ export function SkillConstellation() {
                   className="cursor-pointer outline-none"
                 >
                   <circle cx={star.x} cy={star.y} r="22" fill="transparent" />
-                  <circle cx={star.x} cy={star.y} r={isActive ? 26 : 17} fill={halo} opacity={isActive ? 0.95 : 0.45} className="transition-all duration-300" />
                   <circle
                     cx={star.x}
                     cy={star.y}
                     r={isActive ? 5.6 : 4}
-                    fill={isActive ? "#ffffff" : star.color}
-                    className={`transition-all duration-300 ${reduce ? "" : "skill-twinkle"}`}
-                    style={{ animationDelay: `${(index % 7) * 0.42}s`, animationDuration: `${3 + (index % 4) * 0.5}s` }}
+                    fill={star.color}
+                    className="transition-all duration-300"
                   />
                   <circle
                     cx={star.x}
@@ -239,8 +206,7 @@ export function SkillConstellation() {
                   textAnchor="middle"
                   fontSize="11.5"
                   fontWeight="600"
-                  fill="#ffffff"
-                  fontFamily="ui-monospace, monospace"
+                  fill="#ECE8DF"
                   pointerEvents="none"
                 >
                   {activeStar.name}
@@ -252,10 +218,8 @@ export function SkillConstellation() {
                   height="60"
                   pointerEvents="none"
                 >
-                  <div
-                    className="rounded-xl border border-white/15 bg-[#160831]/95 px-3 py-2 font-mono text-[10px] leading-snug text-slate-200 shadow-[0_12px_40px_rgba(0,0,0,0.6)] backdrop-blur"
-                  >
-                    <span className="mb-1 block text-[9px] uppercase tracking-[0.18em]" style={{ color: activeStar.color }}>
+                  <div className="rounded-lg border border-white/15 bg-hull-2 px-3 py-2 text-[11px] leading-snug text-starlight">
+                    <span className="mb-1 block text-[11px] font-medium" style={{ color: activeStar.color }}>
                       {activeStar.name}
                     </span>
                     {activeStar.reason}
@@ -267,11 +231,9 @@ export function SkillConstellation() {
         </div>
       </div>
 
-      <div className="relative flex flex-wrap items-center justify-between gap-2 border-t border-white/10 px-4 py-3 sm:px-5">
-        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-500">
-          hover the stars — every skill has a note
-        </p>
-        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-indigo-300/70">15 stars · 3 constellations</p>
+      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-white/10 px-4 py-3 sm:px-5">
+        <p className="text-[12px] text-dust">Hover the stars, every skill has a note</p>
+        <p className="text-[12px] text-dust">15 stars in 3 constellations</p>
       </div>
     </div>
   );

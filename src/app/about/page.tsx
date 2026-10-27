@@ -1,146 +1,192 @@
-"use client";
-
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { Download, ArrowRight, MapPin, GraduationCap, Briefcase, Award, Crown, Box, BookOpen, Terminal, Building2, FlaskConical, Cpu, Orbit } from "lucide-react";
+import { Download, Orbit, Music, Cpu, Telescope, Terminal } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Reveal, Stagger, StaggerItem, SectionHeading } from "@/components/motion";
-import { ContributionMap } from "@/components/real-home";
+import { SectionHeading } from "@/components/motion";
 import { experience, skills, journey } from "@/lib/data";
 
-const interests = [
-  { icon: Crown, label: "Chess", note: "1400 rapid" },
-  { icon: Box, label: "Rubik's", note: "sub-45s" },
-  { icon: BookOpen, label: "Reading", note: "systems + sci-fi" },
-  { icon: Terminal, label: "Linux", note: "Arch + Hyprland" },
-  { icon: Building2, label: "Building", note: "always shipping" },
-  { icon: FlaskConical, label: "Research", note: "agents + evals" },
-  { icon: Cpu, label: "Hardware", note: "homelab tinkerer" },
-  { icon: Orbit, label: "Space", note: "cosmos enjoyer" },
+export const metadata: Metadata = {
+  title: "About",
+  description: "Mohamed Samir, full-stack engineer at Zynda AI in Cairo, building AI products and open-source agent tools.",
+};
+
+const facts = [
+  { label: "Now", value: "Full-stack engineer at Zynda AI" },
+  { label: "Based in", value: "Cairo, Egypt (UTC+2)" },
+  { label: "Studied", value: "Computer Science, Faculty of Science, Menofia University, 2021 — 2025" },
+  { label: "Building", value: "yxuOS, yxu-code and scy-ai, in the open" },
+];
+
+const building = [
+  { slug: "yxuos", title: "yxuOS", line: "Whiteboards, designs and agents that draft with your team." },
+  { slug: "yxu-code", title: "yxu-code", line: "Opus leads my coding agents from the terminal." },
+  { slug: "scy-ai", title: "scy-ai", line: "Trackers that read the news so I don't have to." },
+];
+
+const loves = [
+  { icon: Cpu, label: "Tech", note: "Agents, tools and the systems under them" },
+  { icon: Telescope, label: "Space", note: "Stars, orbits and how big it all is" },
+  { icon: Music, label: "Music", note: "Always on while I build" },
+  { icon: Orbit, label: "The future", note: "Building the one I want to live in" },
+  { icon: Terminal, label: "Linux", note: "Arch + Hyprland, tuned daily" },
 ];
 
 export default function AboutPage() {
   return (
-    <div className="mx-auto max-w-6xl px-5 pb-20 pt-2">
-      <div className="grid gap-8 lg:grid-cols-[1fr_1fr] lg:items-start">
-        <Reveal>
-          <p className="text-[11px] uppercase tracking-[0.22em] text-indigo-300">About — the human behind YXU</p>
-          <h1 className="mt-2 text-3xl md:text-4xl font-semibold text-white">Mohamed Samir</h1>
-          <p className="mt-1 flex flex-wrap items-center gap-2 text-[14px] text-slate-300">
-            Software Engineer <span className="text-slate-600">•</span> <span className="flex items-center gap-1"><MapPin size={13} /> Cairo, Egypt</span>
-          </p>
-          <p className="mt-4 max-w-lg text-[14px] leading-relaxed text-slate-400">
-            I&apos;m a backend-leaning engineer who fell into AI systems because clients kept asking “can it read our docs and just do it?” For 4 years I built APIs, queues and dashboards. For the last 2 I&apos;ve specialized in making LLMs useful in production: RAG with citations, agents with budgets, evals that block bad deploys.
-          </p>
-          <p className="mt-3 max-w-lg text-[14px] leading-relaxed text-slate-400">
-            Off-screen: chess, Rubik&apos;s cube, Arabic coffee, night drives, and an Arch setup I&apos;ve been ricing since 2021. I write monthly notes on what actually worked — no hype threads.
-          </p>
-          <div className="mt-5 flex flex-wrap gap-3">
-            <a href="/resume.pdf" download><Button><Download size={14} /> Resume (PDF)</Button></a>
-            <Link href="/contact"><Button variant="secondary">Work with me <ArrowRight size={14} /></Button></Link>
-          </div>
-          <div className="mt-5 grid grid-cols-3 gap-2.5 max-w-md">
-            {[["4+", "years"], ["20+", "projects"], ["3", "open-source"]].map(([v, l]) => (
-              <div key={l} className="rounded-xl border border-white/10 bg-white/[0.03] p-3 text-center"><p className="text-lg font-bold text-white">{v}</p><p className="text-[10px] text-slate-500">{l}</p></div>
-            ))}
-          </div>
-        </Reveal>
-
-        <Reveal delay={0.1} className="space-y-4">
-          <div className="relative h-72 overflow-hidden rounded-3xl border border-white/10">
-            <Image src="https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?q=80&w=1200&auto=format&fit=crop" alt="Night sky over desert — Cairo" fill sizes="(max-width: 768px) 100vw, 560px" className="object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0B011A] via-transparent to-transparent" />
-            <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
-              <div><p className="text-[13px] font-medium text-white">Cairo nights → deep work</p><p className="font-mono text-[11px] text-slate-400">EET (UTC+2) • async-first</p></div>
-              <span className="rounded-full border border-white/15 bg-black/50 px-2.5 py-1 text-[10px] text-slate-200 backdrop-blur">✦ est. 2020</span>
-            </div>
-          </div>
-          <ContributionMap />
-        </Reveal>
-      </div>
-
-      {/* experience */}
-      <section className="mt-12 grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
+    <div className="mx-auto max-w-6xl px-5 pb-24 pt-6">
+      {/* intro */}
+      <section className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
         <div>
-          <SectionHeading eyebrow="Experience" title="Work that taught me production" />
-          <div className="mt-5 space-y-4">
-            {experience.map((e, i) => (
-              <Reveal key={e.role} delay={i * 0.06} className="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
-                <div className="flex items-start gap-3">
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-white/10 bg-gradient-to-br from-indigo-500/25 to-fuchsia-500/15 text-indigo-200">
-                    {i === 0 ? <Briefcase size={17} /> : i === 1 ? <Terminal size={17} /> : <GraduationCap size={17} />}
-                  </span>
-                  <div>
-                    <p className="text-[14.5px] font-semibold text-white">{e.role}</p>
-                    <p className="text-[12.5px] text-indigo-200/80">{e.company} • {e.period} • {e.location}</p>
-                    <ul className="mt-2 space-y-1.5">
-                      {e.points.map((pt) => (
-                        <li key={pt} className="text-[13px] leading-relaxed text-slate-400">• {pt}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </Reveal>
+          <h1 className="font-wide text-4xl font-semibold text-starlight md:text-5xl">About me</h1>
+          <div className="mt-6 max-w-xl space-y-4 text-[15px] leading-relaxed text-dust">
+            <p className="text-lg leading-relaxed text-starlight/90">
+              I&apos;m Mohamed Samir, a full-stack engineer in Cairo. I build AI products end to end, from the database to the
+              agent to the last pixel.
+            </p>
+            <p>
+              At Zynda AI I work across the whole product: backend, frontend, AI and some DevOps. The product is Zynda, a
+              platform where one chat box hands work to a fleet of specialist agents that research, write documents, build
+              apps, edit images and work inside 37 connected apps.
+            </p>
+            <p>
+              Outside work I build my own tools in the open. yxuOS is a workspace where agents draw diagrams, design screens
+              and plan with your team. yxu-code lets Opus lead the coding agents on my machine. scy-ai follows the topics I
+              care about and keeps my reading calm.
+            </p>
+            <p>
+              I&apos;m happiest with music on, a starfield somewhere on screen and an Arch setup I keep tuning. Tech, space and
+              music are what keep me curious, and the future is what I&apos;m building toward.
+            </p>
+          </div>
+
+          <dl className="mt-8 max-w-xl divide-y divide-white/10 border-y border-white/10">
+            {facts.map((f) => (
+              <div key={f.label} className="grid grid-cols-[6.5rem_1fr] gap-4 py-3 text-[14px]">
+                <dt className="text-dust">{f.label}</dt>
+                <dd className="text-starlight/90">{f.value}</dd>
+              </div>
             ))}
+          </dl>
+
+          <div className="mt-8 flex flex-wrap gap-3">
+            <a href="/resume.pdf" download>
+              <Button>
+                <Download size={14} /> Resume (PDF)
+              </Button>
+            </a>
+            <Link href="/contact">
+              <Button variant="secondary">Work with me</Button>
+            </Link>
           </div>
         </div>
-        <div>
-          <SectionHeading eyebrow="Skills" title="Honest proficiency" desc="Levels = can ship alone + on-call it. 90+ means I've debugged it at 2am." />
-          <div className="mt-5 space-y-4">
-            {skills.map((g) => (
-              <Reveal key={g.group} className="rounded-2xl border border-white/10 bg-[#0F112A]/70 p-5">
-                <p className="text-[13px] font-semibold text-white">{g.group}</p>
-                <div className="mt-3 space-y-2.5">
-                  {g.items.map((s) => (
-                    <div key={s.name}>
-                      <div className="flex justify-between text-[12px]"><span className="text-slate-300">{s.name}</span><span className="font-mono text-slate-500">{s.level}%</span></div>
-                      <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-white/10">
-                        <motion.div initial={{ width: 0 }} whileInView={{ width: `${s.level}%` }} viewport={{ once: true }} transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }} className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-fuchsia-500" />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </Reveal>
-            ))}
+
+        <div className="relative h-80 overflow-hidden rounded-lg border border-white/10 lg:h-[30rem]">
+          <Image
+            src="https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?q=80&w=1200&auto=format&fit=crop"
+            alt="Night sky full of stars over the desert"
+            fill
+            sizes="(max-width: 1024px) 100vw, 520px"
+            className="object-cover grayscale"
+            priority
+          />
+          <div className="absolute inset-x-0 bottom-0 bg-space/85 px-5 py-4">
+            <p className="text-[14px] font-medium text-starlight">Cairo nights, deep work</p>
+            <p className="text-[13px] text-dust">The same stars, whatever we build next</p>
           </div>
-          <Reveal className="mt-4 flex items-center gap-2.5 rounded-2xl border border-amber-400/20 bg-amber-500/[0.06] p-4 text-[12.5px] text-amber-100/90">
-            <Award size={16} className="shrink-0 text-amber-300" /> Open to senior backend / AI-platform roles + select freelance. References on request.
-          </Reveal>
         </div>
       </section>
 
-      {/* journey + interests */}
-      <section className="mt-12 grid gap-5 lg:grid-cols-2">
-        <Reveal className="rounded-3xl border border-white/10 bg-white/[0.02] p-6">
-          <h3 className="text-[15px] font-semibold text-white">Journey</h3>
-          <div className="mt-4 relative ml-1 border-l border-indigo-500/30 pl-6 space-y-5">
-            {journey.map((j, i) => (
-              <motion.div key={i} initial={{ opacity: 0, x: -14 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06 }}>
-                <span className="absolute -left-[5px] h-2.5 w-2.5 rounded-full bg-gradient-to-br from-indigo-400 to-fuchsia-500 shadow-[0_0_12px_rgba(99,102,241,0.8)]" style={{ marginTop: 4 }} />
-                <p className="font-mono text-[12px] text-indigo-300">{j.year}</p>
-                <p className="text-[13px] text-slate-300">{j.text}</p>
-              </motion.div>
+      {/* now building */}
+      <section className="mt-24">
+        <SectionHeading title="What I'm building now" />
+        <div className="mt-6 grid gap-px overflow-hidden rounded-lg border border-white/10 bg-white/10 md:grid-cols-3">
+          {building.map((b) => (
+            <Link key={b.slug} href={`/projects/${b.slug}`} className="group bg-space p-5 transition-colors hover:bg-hull">
+              <p className="font-wide text-[17px] font-semibold text-starlight group-hover:text-arcturus">{b.title}</p>
+              <p className="mt-1.5 text-[14px] leading-relaxed text-dust">{b.line}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* experience + toolbox */}
+      <section className="mt-24 grid gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+        <div>
+          <SectionHeading title="Experience" />
+          <div className="mt-6 space-y-8">
+            {experience.map((e) => (
+              <article key={e.role} className="border-l-2 border-arcturus/60 pl-5">
+                <h3 className="text-[16px] font-semibold text-starlight">{e.role}</h3>
+                <p className="mt-0.5 text-[13px] text-dust">
+                  {e.company}, {e.period}
+                  {e.location ? `, ${e.location}` : null}
+                </p>
+                <ul className="mt-3 space-y-1.5">
+                  {e.points.map((pt) => (
+                    <li key={pt} className="text-[14px] leading-relaxed text-dust">
+                      {pt}
+                    </li>
+                  ))}
+                </ul>
+              </article>
             ))}
           </div>
-        </Reveal>
+        </div>
+
         <div>
-          <SectionHeading eyebrow="Beyond code" title="Interests" />
-          <Stagger className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {interests.map((it) => (
-              <StaggerItem key={it.label}>
-                <div className="card-hover rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-center">
-                  <it.icon size={19} className="mx-auto text-indigo-300" />
-                  <p className="mt-1.5 text-[12px] font-medium text-white">{it.label}</p>
-                  <p className="text-[10.5px] text-slate-500">{it.note}</p>
-                </div>
-              </StaggerItem>
+          <SectionHeading title="Toolbox" desc="What I reach for, taken from the projects on this site." />
+          <div className="mt-6 space-y-5">
+            {skills.map((g) => (
+              <div key={g.group}>
+                <h3 className="text-[13px] font-medium text-starlight">{g.group}</h3>
+                <ul className="mt-2 flex flex-wrap gap-1.5">
+                  {g.items.map((item) => (
+                    <li key={item} className="rounded-full border border-white/12 px-3 py-1 text-[13px] text-dust">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             ))}
-          </Stagger>
-          <Reveal className="mt-4 rounded-2xl border border-white/10 bg-gradient-to-br from-indigo-600/15 to-transparent p-6 text-center">
-            <p className="text-[14px] italic leading-relaxed text-slate-200">“I&apos;m not just writing code — I&apos;m building the future I want to live in.”</p>
-            <Link href="/contact" className="mt-4 inline-flex"><Button size="sm">Let&apos;s build it together</Button></Link>
-          </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* journey + loves */}
+      <section className="mt-24 grid gap-12 lg:grid-cols-2">
+        <div>
+          <SectionHeading title="Journey" />
+          <ol className="relative ml-1 mt-6 space-y-6 border-l border-white/10 pl-6">
+            {journey.map((j) => (
+              <li key={j.year} className="relative">
+                <span className="absolute -left-[29px] top-1.5 h-2.5 w-2.5 rounded-full bg-arcturus" />
+                <p className="font-mono text-[13px] text-arcturus">{j.year}</p>
+                <p className="mt-0.5 text-[14px] text-starlight/85">{j.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        <div>
+          <SectionHeading title="What I love" />
+          <ul className="mt-6 divide-y divide-white/10 border-y border-white/10">
+            {loves.map((l) => (
+              <li key={l.label} className="flex items-center gap-4 py-3.5">
+                <l.icon size={18} className="shrink-0 text-arcturus" />
+                <span className="w-24 shrink-0 text-[14px] font-medium text-starlight">{l.label}</span>
+                <span className="text-[14px] text-dust">{l.note}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="font-wide mt-8 text-xl font-semibold leading-snug text-starlight">
+            &ldquo;I&apos;m not just writing code. I&apos;m building the future I want to live in.&rdquo;
+          </p>
+          <Link href="/contact" className="mt-5 inline-flex">
+            <Button size="sm" variant="secondary">
+              Let&apos;s build it together
+            </Button>
+          </Link>
         </div>
       </section>
     </div>

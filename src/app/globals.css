@@ -3,31 +3,39 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+  Palette is taken from stellar spectral classes:
+  space/hull = the sky, starlight = a G-type sun, arcturus = K-type orange giant
+  (also the glow of an analog VU meter), rigel = B-type blue-white.
+*/
 :root {
-  --background: #0b011a;
-  --foreground: #e2e8f0;
-  --card: #0f112a;
-  --card-foreground: #e2e8f0;
-  --popover: #0f112a;
-  --popover-foreground: #e2e8f0;
-  --primary: #6366f1;
-  --primary-foreground: #ffffff;
-  --secondary: #1a1d3d;
-  --secondary-foreground: #e2e8f0;
-  --muted: #1a1d3d;
-  --muted-foreground: #94a3b8;
-  --accent: #a855f7;
-  --accent-foreground: #ffffff;
-  --destructive: #ef4444;
-  --border: rgba(148, 163, 184, 0.14);
-  --input: rgba(148, 163, 184, 0.18);
-  --ring: #6366f1;
-  --radius: 0.75rem;
-  --chart-1: #6366f1;
-  --chart-2: #a855f7;
-  --chart-3: #22d3ee;
-  --chart-4: #f472b6;
-  --chart-5: #facc15;
+  --space: #070a12;
+  --hull: #0f1420;
+  --hull-2: #161c2b;
+  --starlight: #ece8df;
+  --dust: #8c93a3;
+  --arcturus: #f2a541;
+  --rigel: #9fb8ff;
+
+  --background: var(--space);
+  --foreground: var(--starlight);
+  --card: var(--hull);
+  --card-foreground: var(--starlight);
+  --popover: var(--hull);
+  --popover-foreground: var(--starlight);
+  --primary: var(--arcturus);
+  --primary-foreground: #1a1206;
+  --secondary: var(--hull-2);
+  --secondary-foreground: var(--starlight);
+  --muted: var(--hull-2);
+  --muted-foreground: var(--dust);
+  --accent: var(--rigel);
+  --accent-foreground: var(--space);
+  --destructive: #e5604d;
+  --border: rgba(236, 232, 223, 0.1);
+  --input: rgba(236, 232, 223, 0.14);
+  --ring: var(--arcturus);
+  --radius: 0.5rem;
 }
 
 @theme inline {
@@ -49,24 +57,20 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --color-space: var(--space);
+  --color-hull: var(--hull);
+  --color-hull-2: var(--hull-2);
+  --color-starlight: var(--starlight);
+  --color-dust: var(--dust);
+  --color-arcturus: var(--arcturus);
+  --color-rigel: var(--rigel);
+
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, monospace;
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
-  --animate-float: float 8s ease-in-out infinite;
-  --animate-twinkle: twinkle 3s ease-in-out infinite;
-  --animate-horizon: horizon 6s ease-in-out infinite;
-  --animate-spin-slow: spin 14s linear infinite;
-}
-
-@theme {
-  --color-void: #0b011a;
-  --color-abyss: #0f112a;
-  --color-nebula: #1a1d3d;
-  --color-accent-indigo: #6366f1;
-  --color-accent-violet: #a855f7;
-  --color-mist: #e2e8f0;
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
 html {
@@ -76,114 +80,35 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-inter), Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
   overflow-x: hidden;
 }
 
+/* Extra-wide Archivo for headings: reads like synth panels and mission labels. */
+.font-wide {
+  font-stretch: 125%;
+  letter-spacing: -0.01em;
+}
+
 ::selection {
-  background: rgba(99, 102, 241, 0.45);
-  color: white;
+  background: rgba(242, 165, 65, 0.35);
+  color: var(--starlight);
 }
 
-::-webkit-scrollbar {
-  width: 10px;
-}
-::-webkit-scrollbar-track {
-  background: #0b011a;
-}
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #6366f1, #a855f7);
-  border-radius: 8px;
-  border: 2px solid #0b011a;
-}
-
-/* cosmic utilities */
-.cosmic-grid {
-  background-image:
-    linear-gradient(rgba(148, 163, 184, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
-  background-size: 44px 44px;
-  mask-image: radial-gradient(ellipse 90% 70% at 50% 30%, black 30%, transparent 75%);
-}
-
-.glass {
-  background: linear-gradient(180deg, rgba(21, 23, 52, 0.72), rgba(11, 1, 26, 0.72));
-  backdrop-filter: blur(18px);
-  border: 1px solid rgba(148, 163, 184, 0.14);
-}
-
-.text-glow {
-  text-shadow: 0 0 24px rgba(99, 102, 241, 0.55), 0 0 60px rgba(168, 85, 247, 0.3);
-}
-
-.btn-cosmic {
-  background: linear-gradient(135deg, #6366f1 0%, #7c6cf6 45%, #a855f7 100%);
-  box-shadow: 0 0 0 1px rgba(255,255,255,0.12) inset, 0 8px 32px rgba(99,102,241,0.45);
-  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
-}
-.btn-cosmic:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.08);
-  box-shadow: 0 0 0 1px rgba(255,255,255,0.18) inset, 0 12px 48px rgba(168,85,247,0.55);
-}
-
-.card-hover {
-  transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), border-color 0.35s, box-shadow 0.35s;
-}
-.card-hover:hover {
-  transform: translateY(-6px);
-  border-color: rgba(99,102,241,0.5);
-  box-shadow: 0 20px 60px -12px rgba(99,102,241,0.45), 0 0 0 1px rgba(99,102,241,0.25) inset;
-}
-
-.horizon-beam {
-  background: linear-gradient(90deg, transparent, rgba(125,211,252,0.9) 20%, white 50%, rgba(168,85,247,0.9) 80%, transparent);
-  filter: blur(1px);
-  box-shadow: 0 0 32px rgba(99,102,241,0.8), 0 0 80px rgba(168,85,247,0.5);
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-14px); }
-}
-@keyframes twinkle {
-  0%, 100% { opacity: 0.25; transform: scale(0.9); }
-  50% { opacity: 1; transform: scale(1.1); }
-}
-@keyframes horizon {
-  0%, 100% { opacity: 0.75; transform: scaleX(1); }
-  50% { opacity: 1; transform: scaleX(1.04); }
-}
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-@keyframes track-shine {
-  0% { transform: translateX(-130%) skewX(-16deg); }
-  100% { transform: translateX(260%) skewX(-16deg); }
-}
-.track-shine {
-  animation: track-shine 1.15s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-}
-@keyframes skill-twinkle {
-  0%, 100% { opacity: 0.45; }
-  50% { opacity: 1; }
-}
-.skill-twinkle {
-  animation: skill-twinkle 3.5s ease-in-out infinite;
+:focus-visible {
+  outline: 2px solid var(--arcturus);
+  outline-offset: 2px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .track-shine,
-  .skill-twinkle {
-    animation: none;
+  html {
+    scroll-behavior: auto;
   }
-}
-.shimmer-text {
-  background: linear-gradient(110deg, #e2e8f0 30%, #fff 45%, #a5b4fc 50%, #e2e8f0 65%);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  animation: shimmer 5s linear infinite;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
