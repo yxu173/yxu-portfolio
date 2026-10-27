@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { projects, posts } from "@/lib/data";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = "https://yxu.dev";
+  const base = "https://yxu.vercel.app";
   return [
     { url: base, lastModified: new Date() },
     { url: `${base}/projects`, lastModified: new Date() },

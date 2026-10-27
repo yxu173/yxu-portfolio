@@ -14,22 +14,22 @@ const mono = JetBrains_Mono({ variable: "--font-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    default: "Mohamed Samir — Software Engineer | YXU",
+    default: "Mohamed Samir — Full-Stack Engineer | YXU",
     template: "%s | YXU",
   },
-  description: "I design, build and scale software — AI agents, RAG, .NET + Next.js backends. Based in Egypt, working worldwide.",
-  metadataBase: new URL("https://yxu.dev"),
-  keywords: ["Mohamed Samir", "Software Engineer Egypt", "AI agents", "RAG", "Next.js", ".NET", "Mastra", "Backend"],
-  authors: [{ name: "Mohamed Samir", url: "https://yxu.dev" }],
+  description: "Mohamed Samir, full-stack engineer in Cairo building AI products end to end: agents, RAG, backends and interfaces. Full-stack engineer at Zynda AI.",
+  metadataBase: new URL("https://yxu.vercel.app"),
+  keywords: ["Mohamed Samir", "Full-Stack Engineer Egypt", "AI agents", "RAG", "Next.js", "Mastra", "TypeScript", "Zynda AI"],
+  authors: [{ name: "Mohamed Samir", url: "https://yxu.vercel.app" }],
   openGraph: {
-    title: "Mohamed Samir — Building intelligent systems for a better tomorrow",
-    description: "Software Engineer | AI agents, backend, system architecture. Cairo → worldwide.",
+    title: "Mohamed Samir — Full-stack engineer building AI products",
+    description: "AI products end to end, from the agent to the last pixel. Based in Cairo, Egypt.",
     type: "website",
-    url: "https://yxu.dev",
+    url: "https://yxu.vercel.app",
     siteName: "YXU",
     images: [{ url: "/logo.svg", width: 1200, height: 630, alt: "YXU — Mohamed Samir" }],
   },
-  twitter: { card: "summary_large_image", title: "Mohamed Samir | YXU", description: "Backend + AI agent systems that survive production." },
+  twitter: { card: "summary_large_image", title: "Mohamed Samir | YXU", description: "Full-stack engineer building AI products, from the agent to the last pixel." },
   robots: { index: true, follow: true },
   icons: {
     icon: [
@@ -44,10 +44,12 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Mohamed Samir",
-  url: "https://yxu.dev",
-  jobTitle: "Software Engineer",
+  url: "https://yxu.vercel.app",
+  jobTitle: "Full-Stack Engineer",
+  worksFor: { "@type": "Organization", name: "Zynda AI", url: "https://zynda.ai" },
+  alumniOf: { "@type": "CollegeOrUniversity", name: "Menofia University" },
   address: { "@type": "PostalAddress", addressCountry: "EG", addressLocality: "Cairo" },
-  knowsAbout: ["AI Agents", "RAG", "Next.js", ".NET", "PostgreSQL", "System Architecture"],
+  knowsAbout: ["AI Agents", "RAG", "Next.js", "TypeScript", "Mastra", "PostgreSQL"],
   sameAs: ["https://github.com/yxu173", "https://linkedin.com/in/yxu"],
 };
 
