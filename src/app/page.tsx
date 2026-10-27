@@ -8,8 +8,10 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { LogoIcon } from "@/components/logo";
 import { Reveal, Stagger, StaggerItem, SectionHeading } from "@/components/motion";
-import { ProjectCard } from "@/components/project-card";
 import { Stat, RealisticMockup } from "@/components/realistic";
+import { Tracklist } from "@/components/sound/tracklist";
+import { SkillConstellation } from "@/components/sound/skill-constellation";
+import { MissionLog } from "@/components/sound/mission-log";
 import { TypingRoles, DevTerminal, TechMarquee, ContributionMap, AvailabilityBadge } from "@/components/real-home";
 import { projects, experience, testimonials, faqs } from "@/lib/data";
 
@@ -130,32 +132,28 @@ export default function HomePage() {
 
       {/* FEATURED */}
       <section className="mt-14">
-        <div className="flex items-end justify-between gap-4">
-          <SectionHeading eyebrow="Case studies" title="Featured work — with numbers" desc="Each project ships with architecture, evals and honest tradeoffs. Click through for the full story." />
-          <Reveal delay={0.1}><Link href="/projects" className="hidden sm:inline-flex shrink-0 items-center gap-1 text-[13px] text-indigo-300 hover:text-white transition">All projects <ArrowRight size={14} /></Link></Reveal>
-        </div>
-        <div className="mt-6 grid sm:grid-cols-2 gap-5">
-          {projects.map((pr, i) => (
-            <ProjectCard key={pr.slug} project={pr} index={i} />
-          ))}
-        </div>
+        <SectionHeading
+          eyebrow="Discography"
+          title="Featured work — one track per system"
+          desc="The whole catalogue, pressed as one record: architecture, evals and honest tradeoffs on every side."
+        />
+        <Reveal className="mt-6">
+          <Tracklist projects={projects} />
+        </Reveal>
+      </section>
+
+      {/* STAR MAP */}
+      <section className="mt-14">
+        <SectionHeading eyebrow="Star map" title="The stack, as constellations" desc="Three clusters that light up my work — hover a star to hear its note." />
+        <Reveal className="mt-6">
+          <SkillConstellation />
+        </Reveal>
       </section>
 
       {/* EXPERIENCE + ACTIVITY */}
       <section className="mt-14 grid gap-5 lg:grid-cols-2">
-        <Reveal className="rounded-3xl border border-white/10 bg-white/[0.02] p-6">
-          <p className="text-[11px] uppercase tracking-[0.2em] text-indigo-300">Experience</p>
-          <h3 className="mt-1 text-lg font-semibold text-white">Where I&apos;ve been useful</h3>
-          <div className="mt-4 space-y-4">
-            {experience.slice(0, 3).map((e) => (
-              <div key={e.role} className="border-l-2 border-indigo-500/40 pl-4">
-                <p className="text-[13.5px] font-medium text-white">{e.role}</p>
-                <p className="text-[12px] text-indigo-200/80">{e.company} • {e.period}</p>
-                <p className="mt-1 text-[12.5px] text-slate-400 line-clamp-2">{e.points[0]}</p>
-              </div>
-            ))}
-          </div>
-          <Link href="/about" className="mt-4 inline-flex items-center gap-1 text-[13px] text-indigo-300 hover:text-white transition">Full story <ArrowRight size={13} /></Link>
+        <Reveal>
+          <MissionLog items={experience} />
         </Reveal>
         <div className="space-y-4">
           <Reveal delay={0.08}><ContributionMap /></Reveal>

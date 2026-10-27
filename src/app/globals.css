@@ -158,6 +158,27 @@ body {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
+@keyframes track-shine {
+  0% { transform: translateX(-130%) skewX(-16deg); }
+  100% { transform: translateX(260%) skewX(-16deg); }
+}
+.track-shine {
+  animation: track-shine 1.15s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+@keyframes skill-twinkle {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 1; }
+}
+.skill-twinkle {
+  animation: skill-twinkle 3.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track-shine,
+  .skill-twinkle {
+    animation: none;
+  }
+}
 .shimmer-text {
   background: linear-gradient(110deg, #e2e8f0 30%, #fff 45%, #a5b4fc 50%, #e2e8f0 65%);
   background-size: 200% auto;
