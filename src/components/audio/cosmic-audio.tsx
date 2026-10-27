@@ -70,6 +70,8 @@ type Engine = {
   timeData: Uint8Array<ArrayBuffer> | null;
   level: number;
   nextPluckAt: number;
+  nextChordAt: number;
+  nextHeartbeatAt: number;
   schedulerTimer: number | null;
   chordTimer: number | null;
   heartbeatTimer: number | null;
@@ -77,6 +79,10 @@ type Engine = {
   generation: number;
   volume: number;
 };
+
+const CHORD_INTERVAL = 8;
+const HEARTBEAT_INTERVAL = 0.857;
+const TIMING_SLACK = 0.25;
 
 function createEngine(): Engine {
   return {
@@ -94,6 +100,8 @@ function createEngine(): Engine {
     timeData: null,
     level: 0,
     nextPluckAt: 0,
+    nextChordAt: 0,
+    nextHeartbeatAt: 0,
     schedulerTimer: null,
     chordTimer: null,
     heartbeatTimer: null,
@@ -118,13 +126,12 @@ function makeImpulse(ctx: AudioContext, seconds: number, decay: number): AudioBu
   return buffer;
 }
 
-function ensureContext(engine: Engine, volume: number): AudioContext | null {
+function ensureCore(engine: Engine, volume: number): AudioContext | null {
   if (engine.ctx) {
     if (engine.suspendTimer !== null) {
       window.clearTimeout(engine.suspendTimer);
       engine.suspendTimer = null;
     }
-    if (engine.ctx.state === "suspended") void engine.ctx.resume();
     return engine.ctx;
   }
   if (typeof window === "undefined") return null;
@@ -160,13 +167,29 @@ function ensureContext(engine: Engine, volume: number): AudioContext | null {
   compressor.connect(analyser);
   analyser.connect(ctx.destination);
 
-  const ambient = ctx.createGain();
-  ambient.gain.value = 0;
-  ambient.connect(master);
-
   const noteBus = ctx.createGain();
   noteBus.gain.value = 0.9;
   noteBus.connect(master);
+
+  engine.ctx = ctx;
+  engine.master = master;
+  engine.analyser = analyser;
+  engine.noteBus = noteBus;
+  engine.freqData = new Uint8Array(analyser.frequencyBinCount);
+  engine.timeData = new Uint8Array(analyser.fftSize);
+  engine.volume = volume;
+
+  return ctx;
+}
+
+function ensureAmbient(engine: Engine) {
+  const ctx = engine.ctx;
+  const master = engine.master;
+  if (!ctx || !master || engine.ambient) return;
+
+  const ambient = ctx.createGain();
+  ambient.gain.value = 0;
+  ambient.connect(master);
 
   const pluckBus = ctx.createGain();
   pluckBus.gain.value = 1;
@@ -228,21 +251,12 @@ function ensureContext(engine: Engine, volume: number): AudioContext | null {
 
   banks[0].gain.gain.value = PAD_LEVEL;
 
-  engine.ctx = ctx;
-  engine.master = master;
   engine.ambient = ambient;
-  engine.analyser = analyser;
-  engine.noteBus = noteBus;
   engine.pluckBus = pluckBus;
   engine.padFilter = padFilter;
   engine.banks = banks;
   engine.activeBank = 0;
   engine.chordIndex = 0;
-  engine.freqData = new Uint8Array(analyser.frequencyBinCount);
-  engine.timeData = new Uint8Array(analyser.fftSize);
-  engine.volume = volume;
-
-  return ctx;
 }
 
 function clearSchedulingTimers(engine: Engine) {
@@ -295,6 +309,10 @@ function scheduleShimmer(engine: Engine, at: number) {
 function scheduleLoop(engine: Engine, generation: number) {
   const ctx = engine.ctx;
   if (!ctx || engine.generation !== generation) return;
+
+  if (engine.nextPluckAt < ctx.currentTime) {
+    engine.nextPluckAt = ctx.currentTime + 0.05;
+  }
 
   const horizon = ctx.currentTime + 0.4;
   while (engine.nextPluckAt < horizon) {
@@ -360,8 +378,9 @@ function crossfadeChord(engine: Engine, index: number) {
 }
 
 function startAmbient(engine: Engine, volume: number): boolean {
-  const ctx = ensureContext(engine, volume);
+  const ctx = ensureCore(engine, volume);
   if (!ctx) return false;
+  ensureAmbient(engine);
 
   engine.generation++;
   const generation = engine.generation;
@@ -375,6 +394,8 @@ function startAmbient(engine: Engine, volume: number): boolean {
   const now = ctx.currentTime;
   engine.chordIndex = 0;
   engine.nextPluckAt = now + 0.6;
+  engine.nextChordAt = now + CHORD_INTERVAL;
+  engine.nextHeartbeatAt = now + HEARTBEAT_INTERVAL;
 
   const active = engine.banks[engine.activeBank];
   if (active) {
@@ -404,13 +425,31 @@ function startAmbient(engine: Engine, volume: number): boolean {
   );
   engine.chordTimer = window.setInterval(() => {
     if (engine.generation !== generation) return;
+    const current = engine.ctx;
+    if (!current) return;
+    const ahead = engine.nextChordAt - current.currentTime;
+    if (ahead > TIMING_SLACK) return;
+    if (ahead < -TIMING_SLACK) {
+      engine.nextChordAt = current.currentTime + CHORD_INTERVAL;
+      return;
+    }
+    engine.nextChordAt = current.currentTime + CHORD_INTERVAL;
     engine.chordIndex = (engine.chordIndex + 1) % CHORDS.length;
     crossfadeChord(engine, engine.chordIndex);
-  }, 8000);
+  }, CHORD_INTERVAL * 1000);
   engine.heartbeatTimer = window.setInterval(() => {
     if (engine.generation !== generation) return;
+    const current = engine.ctx;
+    if (!current) return;
+    const ahead = engine.nextHeartbeatAt - current.currentTime;
+    if (ahead > TIMING_SLACK) return;
+    if (ahead < -TIMING_SLACK) {
+      engine.nextHeartbeatAt = current.currentTime + HEARTBEAT_INTERVAL;
+      return;
+    }
+    engine.nextHeartbeatAt = current.currentTime + HEARTBEAT_INTERVAL;
     playHeartbeat(engine);
-  }, 857);
+  }, HEARTBEAT_INTERVAL * 1000);
 
   return true;
 }
@@ -457,6 +496,9 @@ function destroyEngine(engine: Engine) {
   engine.freqData = null;
   engine.timeData = null;
   engine.level = 0;
+  engine.nextPluckAt = 0;
+  engine.nextChordAt = 0;
+  engine.nextHeartbeatAt = 0;
   if (ctx) {
     try {
       void ctx.close();
@@ -518,6 +560,20 @@ export function CosmicAudioProvider({ children }: { children: React.ReactNode })
     return () => {
       if (timer) window.clearTimeout(timer);
       destroyEngine(engine);
+    };
+  }, [ensureEngine]);
+
+  useEffect(() => {
+    const engine = ensureEngine();
+    const resume = () => {
+      const ctx = engine.ctx;
+      if (ctx && ctx.state === "suspended") void ctx.resume();
+    };
+    window.addEventListener("pointerdown", resume, { passive: true });
+    window.addEventListener("keydown", resume);
+    return () => {
+      window.removeEventListener("pointerdown", resume);
+      window.removeEventListener("keydown", resume);
     };
   }, [ensureEngine]);
 
@@ -594,9 +650,9 @@ export function CosmicAudioProvider({ children }: { children: React.ReactNode })
   const playNote = useCallback(
     (index: number, opts?: { velocity?: number; duration?: number }) => {
       const engine = ensureEngine();
-      const ctx = ensureContext(engine, volumeRef.current);
+      const ctx = ensureCore(engine, volumeRef.current);
       if (!ctx || !engine.noteBus) return;
-      if (ctx.state === "suspended") void ctx.resume();
+      if (ctx.state !== "running") return;
 
       const wrapped =
         ((Math.floor(index) % PENTATONIC.length) + PENTATONIC.length) %

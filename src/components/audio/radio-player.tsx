@@ -21,6 +21,7 @@ export function RadioPlayer() {
   } = useCosmicAudio();
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const startRef = useRef<() => void>(() => {});
   const playingRef = useRef(playing);
   const [reducedMotion, setReducedMotion] = useState(false);
 
@@ -39,6 +40,7 @@ export function RadioPlayer() {
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.defaultPrevented) return;
+      if (event.repeat) return;
       if (event.metaKey || event.ctrlKey || event.altKey) return;
       if (event.key.toLowerCase() !== "m") return;
       const target = event.target as HTMLElement | null;
@@ -69,8 +71,9 @@ export function RadioPlayer() {
 
     let raf = 0;
     let t = 0;
+    let visible = !document.hidden;
 
-    const render = () => {
+    const draw = () => {
       t += 0.03;
       ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
 
@@ -109,13 +112,57 @@ export function RadioPlayer() {
         ctx.stroke();
         ctx.globalAlpha = 1;
       }
-
-      raf = requestAnimationFrame(render);
     };
 
-    raf = requestAnimationFrame(render);
-    return () => cancelAnimationFrame(raf);
+    const tick = () => {
+      if (!visible) {
+        raf = 0;
+        return;
+      }
+      draw();
+      if (reducedMotion && !playingRef.current) {
+        raf = 0;
+        return;
+      }
+      raf = requestAnimationFrame(tick);
+    };
+
+    const start = () => {
+      cancelAnimationFrame(raf);
+      if (!visible) {
+        raf = 0;
+        return;
+      }
+      if (reducedMotion && !playingRef.current) {
+        draw();
+        raf = 0;
+        return;
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    startRef.current = start;
+
+    const onVisibility = () => {
+      visible = !document.hidden;
+      if (visible) start();
+      else {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+
+    start();
+    return () => {
+      cancelAnimationFrame(raf);
+      document.removeEventListener("visibilitychange", onVisibility);
+      startRef.current = () => {};
+    };
   }, [getFrequencyData, reducedMotion]);
+
+  useEffect(() => {
+    startRef.current();
+  }, [playing]);
 
   const spinning = playing && !reducedMotion;
 
@@ -191,6 +238,7 @@ export function RadioPlayer() {
         <button
           type="button"
           onClick={toggle}
+          title={playing ? "Pause (M)" : "Play (M)"}
           aria-label={playing ? "Pause music" : "Play music"}
           className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-gradient-to-br from-indigo-500 to-fuchsia-500 text-white shadow-[0_0_20px_rgba(168,85,247,0.45)] transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400/70"
         >

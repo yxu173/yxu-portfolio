@@ -68,6 +68,18 @@ const MOONS: MoonSpec[] = [
   },
 ];
 
+const INITIAL_SCENE_SIZE = 520;
+
+function initialMoonTransform(moon: MoonSpec): string {
+  const half = INITIAL_SCENE_SIZE / 2;
+  const angle = moon.phase;
+  const x0 = Math.cos(angle) * moon.orbit * half;
+  const y0 = Math.sin(angle) * moon.orbit * half * moon.flatten;
+  const x = x0 * Math.cos(moon.tilt) - y0 * Math.sin(moon.tilt);
+  const y = x0 * Math.sin(moon.tilt) + y0 * Math.cos(moon.tilt);
+  return `translate(-50%, -50%) translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0)`;
+}
+
 const DISC_STYLE = {
   background: [
     "repeating-radial-gradient(circle at 50% 50%, rgba(255,255,255,0.055) 0 1px, transparent 1px 4px)",
@@ -414,7 +426,10 @@ export function OrbitalHero() {
             onFocus={() => handleEnter(i)}
             onBlur={() => handleLeave(i)}
             className="group absolute left-1/2 top-1/2 z-20 grid h-11 w-11 place-items-center rounded-full border border-white/15 bg-[#120a2c]/70 backdrop-blur-sm transition-colors duration-300 hover:border-white/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400/70"
-            style={{ willChange: "transform" }}
+            style={{
+              willChange: "transform",
+              transform: initialMoonTransform(moon),
+            }}
           >
             <span
               aria-hidden="true"

@@ -69,7 +69,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </div>
           <BackToTop />
           <RadioPlayer />
-          <Toaster theme="dark" position="bottom-center" toastOptions={{ style: { background: "#0F112A", border: "1px solid rgba(99,102,241,0.35)", color: "#E2E8F0" } }} />
+          <Toaster theme="dark" position="bottom-center" offset={{ bottom: 80 }} toastOptions={{ style: { background: "#0F112A", border: "1px solid rgba(99,102,241,0.35)", color: "#E2E8F0" } }} />
         </Providers>
       </body>
     </html>
