@@ -135,7 +135,7 @@ export function BackToTop() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 12 }}
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="fixed bottom-6 right-6 z-[60] grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-[#0F112A]/90 text-white shadow-xl backdrop-blur hover:border-indigo-400/50"
+          className="fixed bottom-20 right-4 z-[60] grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-[#0F112A]/90 text-white shadow-xl backdrop-blur hover:border-indigo-400/50 sm:bottom-6 sm:right-6"
           aria-label="Back to top"
         >
           ↑

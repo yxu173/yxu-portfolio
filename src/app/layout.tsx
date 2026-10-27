@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Starfield, Nebula } from "@/components/cosmic";
 import { ScrollProgress, BackToTop } from "@/components/chrome";
+import { RadioPlayer } from "@/components/audio/radio-player";
 import { Toaster } from "sonner";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
@@ -67,6 +68,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <SiteFooter />
           </div>
           <BackToTop />
+          <RadioPlayer />
           <Toaster theme="dark" position="bottom-center" toastOptions={{ style: { background: "#0F112A", border: "1px solid rgba(99,102,241,0.35)", color: "#E2E8F0" } }} />
         </Providers>
       </body>
