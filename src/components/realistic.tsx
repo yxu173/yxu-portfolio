@@ -1,7 +1,5 @@
 "use client";
 
-import Image from "next/image";
-import { motion } from "framer-motion";
 import { CircleDot, GitBranch, Search, Bell, Plus, Send, Zap, Database, CheckCircle2 } from "lucide-react";
 import type { Project } from "@/lib/data";
 import { cn } from "@/lib/utils";
@@ -154,23 +152,5 @@ export function RealisticMockup({ project, className }: { project: Project; clas
         </div>
       </div>
     </BrowserChrome>
-  );
-}
-
-export function CoverImage({ src, alt, className }: { src: string; alt: string; className?: string }) {
-  return (
-    <div className={cn("relative overflow-hidden", className)}>
-      <Image src={src} alt={alt} fill sizes="(max-width: 768px) 100vw, 600px" className="object-cover transition-transform duration-700 hover:scale-105" />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#0B011A] via-transparent to-transparent" />
-    </div>
-  );
-}
-
-export function Stat({ value, label, delay = 0 }: { value: string; label: string; delay?: number }) {
-  return (
-    <motion.div initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay, duration: 0.5 }} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-center backdrop-blur">
-      <p className="bg-gradient-to-r from-indigo-200 via-white to-fuchsia-200 bg-clip-text text-2xl font-bold text-transparent">{value}</p>
-      <p className="mt-1 text-[11px] text-slate-400">{label}</p>
-    </motion.div>
   );
 }

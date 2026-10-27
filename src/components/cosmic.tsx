@@ -61,7 +61,24 @@ export function Starfield({ density = 1, className = "" }: { density?: number; c
     let links: Link[] = [];
     let shoots: Shoot[] = [];
     let t = 0;
+    let glowSprite: HTMLCanvasElement | null = null;
     const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
+
+    const buildGlowSprite = () => {
+      const size = 64;
+      const sprite = document.createElement("canvas");
+      sprite.width = size;
+      sprite.height = size;
+      const sctx = sprite.getContext("2d");
+      if (!sctx) return;
+      const half = size / 2;
+      const gradient = sctx.createRadialGradient(half, half, 0, half, half, half);
+      gradient.addColorStop(0, "rgba(129,140,248,1)");
+      gradient.addColorStop(1, "rgba(129,140,248,0)");
+      sctx.fillStyle = gradient;
+      sctx.fillRect(0, 0, size, size);
+      glowSprite = sprite;
+    };
 
     const buildStars = () => {
       const count = Math.floor((w * h) / 5200 * density);
@@ -104,15 +121,11 @@ export function Starfield({ density = 1, className = "" }: { density?: number; c
         ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(226,232,240,${(a * 0.9).toFixed(3)})`;
         ctx.fill();
-        if (s.r > 1.1) {
+        if (s.r > 1.1 && glowSprite) {
           const glowR = s.r * 3.2;
-          const g = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, glowR);
-          g.addColorStop(0, `rgba(129,140,248,${(a * 0.35).toFixed(3)})`);
-          g.addColorStop(1, "rgba(129,140,248,0)");
-          ctx.fillStyle = g;
-          ctx.beginPath();
-          ctx.arc(s.x, s.y, glowR, 0, Math.PI * 2);
-          ctx.fill();
+          ctx.globalAlpha = a * 0.35;
+          ctx.drawImage(glowSprite, s.x - glowR, s.y - glowR, glowR * 2, glowR * 2);
+          ctx.globalAlpha = 1;
         }
       }
       drawLinks(0.05);
@@ -123,6 +136,7 @@ export function Starfield({ density = 1, className = "" }: { density?: number; c
       w = rect.width; h = rect.height;
       canvas.width = w * dpr; canvas.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      buildGlowSprite();
       buildStars();
       if (reduced) drawStatic();
     };
@@ -158,15 +172,11 @@ export function Starfield({ density = 1, className = "" }: { density?: number; c
         ctx.arc(x, y, r, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(226,232,240,${(a * 0.9).toFixed(3)})`;
         ctx.fill();
-        if (s.r > 1.1) {
+        if (s.r > 1.1 && glowSprite) {
           const glowR = s.r * 3.2 * (1 + level * 0.9);
-          const g = ctx.createRadialGradient(x, y, 0, x, y, glowR);
-          g.addColorStop(0, `rgba(129,140,248,${(a * (0.35 + level * 0.35)).toFixed(3)})`);
-          g.addColorStop(1, "rgba(129,140,248,0)");
-          ctx.fillStyle = g;
-          ctx.beginPath();
-          ctx.arc(x, y, glowR, 0, Math.PI * 2);
-          ctx.fill();
+          ctx.globalAlpha = a * (0.35 + level * 0.35);
+          ctx.drawImage(glowSprite, x - glowR, y - glowR, glowR * 2, glowR * 2);
+          ctx.globalAlpha = 1;
         }
       }
 
@@ -230,15 +240,6 @@ export function Nebula({ className = "" }: { className?: string }) {
       <div className="absolute top-1/4 -right-40 h-[480px] w-[480px] rounded-full bg-cyan-500/10 blur-[120px]" />
       <div className="absolute bottom-0 left-1/2 h-[220px] w-[1100px] -translate-x-1/2 rounded-[100%] bg-indigo-500/20 blur-[80px]" />
       <div className="cosmic-grid absolute inset-0" />
-    </div>
-  );
-}
-
-export function Horizon({ className = "" }: { className?: string }) {
-  return (
-    <div className={`pointer-events-none relative ${className}`} aria-hidden>
-      <div className="horizon-beam animate-[horizon_6s_ease-in-out_infinite] h-[2px] w-full rounded-full" />
-      <div className="absolute left-1/2 top-0 h-[180px] w-[720px] -translate-x-1/2 bg-gradient-to-t from-indigo-500/25 to-transparent blur-2xl" />
     </div>
   );
 }
